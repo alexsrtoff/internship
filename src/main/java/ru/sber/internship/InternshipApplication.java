@@ -12,18 +12,3 @@ public class InternshipApplication extends SpringBootServletInitializer {
 //    }
 
 }
-
-
-//import org.springframework.boot.autoconfigure.SpringBootApplication;
-//import org.springframework.boot.builder.SpringApplicationBuilder;
-//import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-//
-//@SpringBootApplication
-//public class InternshipApplication extends SpringBootServletInitializer {
-//
-//    @Override
-//    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-//        return application.sources(InternshipApplication.class);
-//    }
-////    mvn install liberty:run-server
-//}
