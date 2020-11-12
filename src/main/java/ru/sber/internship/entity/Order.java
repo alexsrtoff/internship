@@ -1,9 +1,10 @@
 package ru.sber.internship.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import ru.sber.internship.entity.utils.PayConfirm;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import ru.sber.internship.entity.utils.OrderStatus;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,25 +12,36 @@ import java.util.List;
 
 @Entity
 @Table(name = "orders")
-@Setter
-@Getter
+@Data
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column
-    private BigDecimal tottalPrice;
+    private BigDecimal totalPrice;
 
     @Column
-    private PayConfirm payConfirm;
+    private OrderStatus orderStatus;
 
     @ManyToOne
     private Client client;
 
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems;
 
+    @JsonIgnore
+    public Client getClient(){return client;}
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", tottalPrice=" + totalPrice +
+                ", orderStatus=" + orderStatus +
+                ", client=" + client +
+                ", orderItems=" + orderItems +
+                '}';
+    }
 }

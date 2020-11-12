@@ -47,13 +47,8 @@ public class ProductController {
 
 
     @DeleteMapping("/{id}")
-    public boolean delete(@PathVariable(value = "id", required = true) int id) {
-        boolean flag = false;
-        if (productService.findById(id) != null) {
-            productService.deleteById(id);
-            flag = true;
-        }
-        return flag;
+    public boolean delete(@PathVariable(value = "id", required = true) long id) {
+        return productService.deleteById(id);
     }
 
 }

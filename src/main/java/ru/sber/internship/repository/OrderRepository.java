@@ -8,7 +8,7 @@ import ru.sber.internship.entity.Order;
 import java.util.List;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, Integer> {
-    Order findById(int id);
+public interface OrderRepository extends JpaRepository<Order, Long> {
+    Order findById(long id);
     List<Order> findAllByClient(Client client);
 }

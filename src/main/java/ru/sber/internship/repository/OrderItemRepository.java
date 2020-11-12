@@ -6,6 +6,6 @@ import ru.sber.internship.entity.OrderItem;
 
 
 @Repository
-public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
-
+public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
+    OrderItem findById(long id);
 }

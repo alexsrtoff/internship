@@ -1,7 +1,11 @@
 package ru.sber.internship.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,11 +15,12 @@ import java.util.List;
 @Table(name = "products")
 @Getter
 @Setter
+@ToString(of = {"id", "name", "description", "price", "discount"})
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String name;
 
@@ -25,11 +30,7 @@ public class Product {
 
     private int discount;
 
-//    @ManyToOne
-//    private OrderItem orderItem;
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems;
-
 
 }

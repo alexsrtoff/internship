@@ -1,8 +1,9 @@
 package ru.sber.internship.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,13 +11,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "clients")
-@Getter
-@Setter
+@Data
 public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -27,8 +27,7 @@ public class Client {
     @Column(name = "email", unique = true)
     private String email;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
 

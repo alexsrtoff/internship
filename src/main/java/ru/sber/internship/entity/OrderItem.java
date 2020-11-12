@@ -1,9 +1,7 @@
 package ru.sber.internship.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,21 +9,32 @@ import javax.persistence.*;
 @Table(name = "order_items")
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString(of = {"id", "count"})
+@Builder
 public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "count")
-    private int count;
+    private Integer count;
 
-    @JsonIgnore
     @ManyToOne
     private Order order;
 
-    @JsonIgnore
     @ManyToOne
     private Product product;
 
+    @JsonIgnore
+    public Order getOrder() {
+        return order;
+    }
+
+    @JsonIgnore
+    public Product getProduct() {
+        return product;
+    }
 }

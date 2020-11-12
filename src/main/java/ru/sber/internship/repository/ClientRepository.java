@@ -6,6 +6,6 @@ import ru.sber.internship.entity.Client;
 
 
 @Repository
-public interface ClientRepository extends JpaRepository<Client, Integer> {
-    Client findById(int id);
+public interface ClientRepository extends JpaRepository<Client, Long> {
+    Client findById(long id);
 }

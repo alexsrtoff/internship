@@ -1,5 +1,7 @@
 package ru.sber.internship.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.sber.internship.entity.Client;
@@ -9,17 +11,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/clients")
+@Api(value = "Clients", description = "Operations related to clients")
 public class ClientController {
 
     @Autowired
     ClientServiceImpl clientService;
 
-
     @GetMapping
+    @ApiOperation(value = "Show all clients")
     public List<Client> findAll() {
         return clientService.findAll();
     }
 
+    @ApiOperation(value = "Search a client with an ID")
     @GetMapping("/{id}")
     public Client findClientById(@PathVariable(value = "id", required = true) int id) {
         if (clientService.findById(id) != null) {
@@ -27,32 +31,27 @@ public class ClientController {
         } else return new Client();
     }
 
-
+    @ApiOperation(value = "Add new client")
     @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
-    public void add(@RequestBody Client client) {
+    public Client add(@RequestBody Client client) {
         if (client.getId() != null) {
             throw new IllegalArgumentException("Id found in the create reuest");
         }
-        clientService.save(client);
+        return clientService.save(client);
     }
 
+    @ApiOperation(value = "Update a client")
     @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
-    private void update(@RequestBody Client client) {
+    private Client update(@RequestBody Client client) {
         if (client.getId() == null) {
             throw new IllegalArgumentException("Id not found in the create reuest");
         }
-        clientService.save(client);
-
+        return clientService.save(client);
     }
 
-
     @DeleteMapping("/{id}")
-    public boolean delete(@PathVariable(value = "id", required = true) int id) {
-        boolean flag = false;
-        if (clientService.findById(id) != null) {
-            clientService.deleteById(id);
-            flag = true;
-        }
-        return flag;
+    @ApiOperation(value = "Delete client")
+    public boolean delete(@PathVariable(value = "id") int id) {
+        return clientService.deleteById(id);
     }
 }
