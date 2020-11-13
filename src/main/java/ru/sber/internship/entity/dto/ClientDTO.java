@@ -5,15 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderItemDTO {
-
+public class ClientDTO {
     private Long id;
-    private int count;
-    private Long productId;
-    private Long orderId;
+
+    private String firstName;
+
+    private String lastName;
+
+    private String email;
+
 }

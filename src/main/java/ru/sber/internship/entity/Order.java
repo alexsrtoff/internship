@@ -1,7 +1,10 @@
 package ru.sber.internship.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import ru.sber.internship.entity.utils.OrderStatus;
@@ -13,6 +16,9 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Order {
 
     @Id
@@ -38,10 +44,8 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", tottalPrice=" + totalPrice +
+                ", totalPrice=" + totalPrice +
                 ", orderStatus=" + orderStatus +
-                ", client=" + client +
-                ", orderItems=" + orderItems +
                 '}';
     }
 }

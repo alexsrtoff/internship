@@ -4,16 +4,22 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.sber.internship.entity.utils.OrderStatus;
 
+import java.math.BigDecimal;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderItemDTO {
-
+@Builder
+public class OrderDTO {
     private Long id;
-    private int count;
-    private Long productId;
-    private Long orderId;
+
+    private BigDecimal totalPrice;
+
+    private OrderStatus orderStatus;
+
+    private Long clientId;
+
+
 }
