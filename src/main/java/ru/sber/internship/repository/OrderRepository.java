@@ -12,9 +12,10 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     Order findById(long id);
 
-    Order findOrderByIdAndAndClientId(long orderId, long clientId);
+    Order findOrderByIdAndClientId(long orderId, long clientId);
 
+    Order findByIdAndClient_Id(long orderId, long clientId);
 
-    Order findByIdAndAndClient_Id(long orderId, long clientId);
+    List<Order> findAllByClient_Id(long id);
 
 }

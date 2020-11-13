@@ -14,4 +14,7 @@ public interface OrderService {
     Order findOrderByIdAndAndClientId(Long orderId, Long clientId);
 
     boolean deleteByIdAndClient_Id(long orderId, long clientId);
+
+    List<Order> findAllByClient_Id(long id);
+
 }

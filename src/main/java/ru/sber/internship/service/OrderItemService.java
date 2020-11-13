@@ -13,4 +13,5 @@ public interface OrderItemService {
 
     List<OrderItem> findAllByOrder_Id(long orderId);
 
+    List<OrderItem> findAllByProductId(long productId);
 }
