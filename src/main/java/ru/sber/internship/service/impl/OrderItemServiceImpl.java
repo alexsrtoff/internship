@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.sber.internship.entity.Order;
 import ru.sber.internship.entity.OrderItem;
 import ru.sber.internship.entity.Product;
 import ru.sber.internship.entity.dto.OrderItemDTO;
@@ -58,11 +57,6 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Override
     public OrderItem save(OrderItem orderItem) {
         return orderItemRepository.save(orderItem);
-    }
-
-    @Override
-    public OrderItem findOrderItemByIdAndOrder_Client_Id(Long id, Long clientId) {
-        return orderItemRepository.findOrderItemByIdAndOrderClientId(id, clientId);
     }
 
     @Override

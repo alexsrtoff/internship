@@ -3,13 +3,16 @@ package ru.sber.internship.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sber.internship.entity.Order;
+import ru.sber.internship.entity.OrderItem;
 import ru.sber.internship.entity.dto.OrderDTO;
 import ru.sber.internship.entity.dto.OrderItemDTO;
+import ru.sber.internship.entity.utils.OrderStatus;
 import ru.sber.internship.repository.OrderRepository;
 import ru.sber.internship.repository.ProductRepository;
 import ru.sber.internship.service.OrderService;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,11 +96,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public boolean chekOrderByOrderItem(OrderItemDTO itemDTO, Long clientId) {
-        return findOrderByIdAndAndClientId(itemDTO.getOrderId(), clientId) != null;
+        Order order = findOrderByIdAndAndClientId(itemDTO.getOrderId(), clientId);
+        return order != null && order.getOrderStatus().equals(OrderStatus.UNPAYED);
+
+//        return findOrderByIdAndAndClientId(itemDTO.getOrderId(), clientId) != null;
     }
 
     public boolean chekOrder(OrderDTO orderDTO) {
-        return findOrderByIdAndAndClientId(orderDTO.getId(), orderDTO.getClientId()) != null;
+        Order order = findOrderByIdAndAndClientId(orderDTO.getId(), orderDTO.getClientId());
+        return order != null && order.getOrderStatus().equals(OrderStatus.UNPAYED);
     }
 
 
@@ -112,5 +119,20 @@ public class OrderServiceImpl implements OrderService {
 
     public List<OrderDTO> convertOrderListToOrderDTOList(List<Order> orderList) {
         return orderList.stream().map(o -> convertOrderToOrderDTO(o)).collect(Collectors.toList());
+    }
+
+    public Order createOrder(OrderItemDTO itemDTO, Long clientId) {
+        List<OrderItem> orderItems = new ArrayList<>();
+
+        Order order = save(Order.builder()
+                .client(clientService.findById(clientId))
+                .orderStatus(OrderStatus.UNPAYED)
+                .build());
+        itemDTO.setOrderId(order.getId());
+        orderItems.add(orderItemService.convertOrderItemDTOToOrderItem(itemDTO));
+
+        order.setOrderItems(orderItems);
+        calcTotalPrice(order.getId());
+        return order;
     }
 }

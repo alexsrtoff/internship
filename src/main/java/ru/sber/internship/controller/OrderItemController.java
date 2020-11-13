@@ -1,7 +1,9 @@
 package ru.sber.internship.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import ru.sber.internship.entity.Order;
 import ru.sber.internship.entity.OrderItem;
 import ru.sber.internship.entity.dto.ClientDTO;
 import ru.sber.internship.entity.dto.OrderDTO;
@@ -85,6 +87,7 @@ public class OrderItemController {
 
 
     @PostMapping(value = "/{clientId}/add", consumes = "application/json", produces = "application/json")
+    @Transactional
     public OrderItemDTO addItemToClient(@RequestBody OrderItemDTO itemDTO, @PathVariable("clientId") Long clientId) {
         if (orderService.chekOrderByOrderItem(itemDTO, clientId)) {
             OrderItem orderItem = orderItemService.convertOrderItemDTOToOrderItem(itemDTO);
@@ -93,7 +96,8 @@ public class OrderItemController {
             itemDTO.setProductId(orderItem.getProduct().getId());
             return itemDTO;
         } else {
-            return new OrderItemDTO();
+            Order order = orderService.createOrder(itemDTO, clientId);
+            return orderItemService.convertOrderItemToOrderItemDTO(order.getOrderItems().get(0));
         }
     }
 
@@ -108,6 +112,7 @@ public class OrderItemController {
 
 
     @PutMapping(value = "/{clientId}/update", consumes = "application/json", produces = "application/json")
+    @Transactional
     public OrderItemDTO updateClientItem(@RequestBody OrderItemDTO itemDTO, @PathVariable("clientId") Long clientId) {
         if (itemDTO.getId() == null) {
             throw new IllegalArgumentException("Id not found in the update request");
