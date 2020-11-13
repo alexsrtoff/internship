@@ -1,9 +1,7 @@
 package ru.sber.internship.service;
 
-import ru.sber.internship.entity.Client;
 import ru.sber.internship.entity.Order;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface OrderService {
@@ -16,6 +14,4 @@ public interface OrderService {
     Order findOrderByIdAndAndClientId(Long orderId, Long clientId);
 
     boolean deleteByIdAndClient_Id(long orderId, long clientId);
-
-
 }

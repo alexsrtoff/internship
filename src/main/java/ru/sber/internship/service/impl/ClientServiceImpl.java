@@ -46,16 +46,4 @@ public class ClientServiceImpl implements ClientService {
                 .lastName(client.getLastName())
                 .build();
     }
-
-//    public Client getClientFromRequest(JsonNode node, ObjectMapper mapper) {
-//        JsonNode clientNode = node.get("client");
-//        Client client = null;
-//        try {
-//            client = mapper.treeToValue(clientNode, Client.class);
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return client;
-//    }
 }

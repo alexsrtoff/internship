@@ -13,10 +13,15 @@ import java.util.List;
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     OrderItem findById(long id);
+
     OrderItem findOrderItemByIdAndOrderClientId(Long id, Long clientId);
+
     List<OrderItem> findAllByOrder_Client_Id(Long clientId);
+
     List<OrderItem> findAllByOrder_Id(long orderId);
+
     void deleteById(long id);
+
     Product findByProductId(long id);
 }
 

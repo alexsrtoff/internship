@@ -33,13 +33,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public boolean deleteById(long id) {
-        if(productRepository.findById(id) == null){
+        if (productRepository.findById(id) == null) {
             return false;
         }
         productRepository.deleteById(id);
         return true;
     }
-
 
     public ProductDTO convertProductToProductDTO(Product product) {
         return ProductDTO.builder()
@@ -51,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
                 .build();
     }
 
-    public List<ProductDTO> createProductDTOList(List<OrderItem>items) {
+    public List<ProductDTO> createProductDTOList(List<OrderItem> items) {
 
         return items.stream().map(p -> convertProductToProductDTO(p.getProduct())).collect(Collectors.toList());
     }

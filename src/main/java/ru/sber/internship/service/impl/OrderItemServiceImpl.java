@@ -38,23 +38,22 @@ public class OrderItemServiceImpl implements OrderItemService {
         return orderItemRepository.findById(id);
     }
 
-    public boolean deleteById(long id, long clienId)  {
-        if (orderItemRepository.findOrderItemByIdAndOrderClientId(id, clienId) == null){
+    public boolean deleteById(long id, long clienId) {
+        if (orderItemRepository.findOrderItemByIdAndOrderClientId(id, clienId) == null) {
             return false;
         }
         orderItemRepository.deleteById(id);
         return true;
     }
 
-    public boolean delete (long id){
-        if (orderItemRepository.findById(id) == null){
+    public boolean delete(long id) {
+        if (orderItemRepository.findById(id) == null) {
             return false;
         }
         orderItemRepository.deleteById(id);
         return true;
 
     }
-
 
     @Override
     public OrderItem save(OrderItem orderItem) {
@@ -90,28 +89,6 @@ public class OrderItemServiceImpl implements OrderItemService {
         return orderItemList;
     }
 
-    public List<OrderItem> transferOrderItemsDTOToOrderItems(JsonNode node, ObjectMapper mapper, Order order) {
-        List<OrderItemDTO> orderItemsDTOFromRequest = getOrderItemsDTOFromRequest(node, mapper);
-        List<OrderItem> orderItems = new ArrayList<>();
-        orderItemsDTOFromRequest.forEach(o -> {
-            OrderItem orderItem = null;
-            if (o.getId() == null) {
-                orderItem = OrderItem.builder()
-                        .id(o.getId())
-                        .count(o.getCount())
-                        .product(productService.findById(o.getProductId()))
-                        .order(order)
-                        .build();
-            } else {
-                OrderItem item = findById(o.getId());
-                item.setCount(o.getCount());
-                item.setProduct(productService.findById(o.getProductId()));
-                item.setOrder(order);
-            }
-            orderItems.add(orderItem);
-        });
-        return orderItems;
-    }
 
     public OrderItem convertOrderItemDTOToOrderItem(OrderItemDTO orderItemDTO) {
         return save(OrderItem.builder()
@@ -120,12 +97,6 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .product(productService.findById(orderItemDTO.getProductId()))
                 .order(orderService.findById(orderItemDTO.getOrderId()))
                 .build());
-//        OrderItem itemByClientId = orderItemRepository.
-//                findOrderItemByIdAndOrderClientId(orderItemDTO.getId(),
-//                        orderService.findById(orderItemDTO.getOrderId()).getClient().getId());
-//        if (itemByClientId == null) return null;
-//        itemByClientId.setCount(orderItemDTO.getCount());
-//        return itemByClientId;
     }
 
 
@@ -135,7 +106,6 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .count(o.getCount())
                 .orderId(o.getOrder().getId())
                 .productId(o.getProduct().getId())
-//                .product(productService.convertProductToProductDTO(o.getProduct()))
                 .build();
     }
 
@@ -151,7 +121,7 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .collect(Collectors.toList());
     }
 
-    public Product showProductByItemId(long itemId){
+    public Product showProductByItemId(long itemId) {
         return orderItemRepository.findByProductId(itemId);
     }
 }
