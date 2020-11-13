@@ -1,12 +1,9 @@
 package ru.sber.internship.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.sber.internship.entity.Order;
-import ru.sber.internship.entity.OrderItem;
 import ru.sber.internship.entity.dto.OrderDTO;
 import ru.sber.internship.service.impl.ClientServiceImpl;
 import ru.sber.internship.service.impl.OrderItemServiceImpl;
@@ -30,17 +27,38 @@ public class OrderController {
 
 
     @GetMapping
-    public List<Order> findAll() {
-        return orderService.findAll();
+    public List<OrderDTO> findAll() {
+        return orderService.convertOrderListToOrderDTOList(orderService.findAll());
     }
 
 
     @GetMapping("/{id}")
-    public Order findById(@PathVariable(value = "id") int id) {
+    public OrderDTO findById(@PathVariable(value = "id") int id) {
         if (orderService.findById(id) != null) {
-            return orderService.findById(id);
-        } else return new Order();
+            return orderService.convertOrderToOrderDTO(orderService.findById(id));
+        } else return new OrderDTO();
     }
+
+    @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
+    public OrderDTO add(@RequestBody OrderDTO orderDTO) {
+        if (orderDTO.getId() != null) orderDTO.setId(null);
+        Order order = orderService.convertOrderDTOToOrder(orderDTO);
+
+        return orderService.convertOrderToOrderDTO(orderService.save(order));
+    }
+
+    @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
+    public OrderDTO update(@RequestBody OrderDTO orderDTO) {
+        if (orderService.chekOrder(orderDTO)) {
+            Order order = orderService.findById(orderDTO.getId());
+            order.setOrderStatus(orderDTO.getOrderStatus());
+
+            return orderService.convertOrderToOrderDTO(orderService.save(order));
+
+        }
+        return new OrderDTO();
+    }
+
 
 //    @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
 //    private Order update(@RequestBody OrderDTO orderDTO) {
@@ -51,7 +69,6 @@ public class OrderController {
 //        return orderService.save(order);
 //
 //    }
-
 
 
 //    @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
@@ -69,11 +86,6 @@ public class OrderController {
         return orderService.deleteById(id);
     }
 
-    @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
-    public Order add(@RequestBody OrderDTO orderDTO) {
-        Order order = orderService.convertOrderDTOToOrder(orderDTO);
-        return orderService.save(order);
-    }
 
 //    @PostMapping(value = "/{clientId}/add", consumes = "application/json", produces = "application/json")
 //    public Order add(@RequestBody String json, @PathVariable("clientId") long clientId) {

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.type.LocaleType;
 import ru.sber.internship.entity.Product;
 
 import java.util.List;
@@ -18,5 +19,5 @@ public class OrderItemDTO {
     private int count;
     private Long productId;
     private Long orderId;
-    private ProductDTO product;
+//    private ProductDTO product;
 }

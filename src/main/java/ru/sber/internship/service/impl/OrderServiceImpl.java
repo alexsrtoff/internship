@@ -14,6 +14,7 @@ import ru.sber.internship.service.OrderService;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -82,12 +83,18 @@ public class OrderServiceImpl implements OrderService {
                 .id(order.getId())
                 .orderStatus(order.getOrderStatus())
                 .totalPrice(order.getTotalPrice())
+                .clientId(order.getClient().getId())
                 .build();
     }
 
-    public boolean chekOrder(OrderItemDTO itemDTO, Long clientId) {
+    public boolean chekOrderByOrderItem(OrderItemDTO itemDTO, Long clientId) {
         return findOrderByIdAndAndClientId(itemDTO.getOrderId(), clientId) != null;
     }
+
+    public boolean chekOrder(OrderDTO orderDTO) {
+        return findOrderByIdAndAndClientId(orderDTO.getId(), orderDTO.getClientId()) != null;
+    }
+
 
     public Order convertOrderDTOToOrder(OrderDTO orderDTO) {
         return Order.builder()
@@ -95,8 +102,10 @@ public class OrderServiceImpl implements OrderService {
                 .orderStatus(orderDTO.getOrderStatus())
                 .client(clientService.findById(orderDTO.getClientId()))
                 .id(orderDTO.getId())
-//                .orderItems(orderItemService.convertListOrdetDTOToListOrder(orderDTO.getItems()))
                 .build();
     }
 
+    public List<OrderDTO> convertOrderListToOrderDTOList(List<Order> orderList) {
+        return orderList.stream().map(o -> convertOrderToOrderDTO(o)).collect(Collectors.toList());
+    }
 }

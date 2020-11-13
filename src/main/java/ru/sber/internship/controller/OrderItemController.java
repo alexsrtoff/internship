@@ -7,6 +7,7 @@ import ru.sber.internship.entity.OrderItem;
 import ru.sber.internship.entity.dto.ClientDTO;
 import ru.sber.internship.entity.dto.OrderDTO;
 import ru.sber.internship.entity.dto.OrderItemDTO;
+import ru.sber.internship.entity.dto.ProductDTO;
 import ru.sber.internship.service.impl.ClientServiceImpl;
 import ru.sber.internship.service.impl.OrderItemServiceImpl;
 import ru.sber.internship.service.impl.OrderServiceImpl;
@@ -61,10 +62,21 @@ public class OrderItemController {
     }
 
     @GetMapping("/{id}")
-    public OrderItem findById(@PathVariable(value = "id") long id) {
-        if (orderItemService.findById(id) != null) {
-            return orderItemService.findById(id);
-        } else return new OrderItem();
+    public OrderItemDTO findById(@PathVariable(value = "id") long id) {
+        OrderItem item = orderItemService.findById(id);
+
+        if (item != null) {
+            return orderItemService.convertOrderItemToOrderItemDTO(item);
+        } else return new OrderItemDTO();
+    }
+
+    @GetMapping("{itemId}/product")
+    public ProductDTO showProductByItemId(@PathVariable("itemId") Long id){
+        OrderItem item = orderItemService.findById(id);
+
+        if (item != null) {
+            return productService.convertProductToProductDTO(item.getProduct());
+        } else return new ProductDTO();
     }
 
     @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
@@ -74,19 +86,17 @@ public class OrderItemController {
 
 
     @PostMapping(value = "/{clientId}/add", consumes = "application/json", produces = "application/json")
-    @Transactional
     public OrderItemDTO addItemToClient(@RequestBody OrderItemDTO itemDTO, @PathVariable("clientId") Long clientId) {
-        if (orderService.chekOrder(itemDTO, clientId)) {
+        if (orderService.chekOrderByOrderItem(itemDTO, clientId)) {
             OrderItem orderItem = orderItemService.convertOrderItemDTOToOrderItem(itemDTO);
             orderService.calcTotalPrice(itemDTO.getOrderId());
             itemDTO.setId(orderItem.getId());
-            itemDTO.setProduct(productService.convertProductToProductDTO(productService.findById(itemDTO.getProductId())));
+            itemDTO.setProductId(orderItem.getProduct().getId());
+//            itemDTO.setProduct(productService.convertProductToProductDTO(productService.findById(itemDTO.getProductId())));
             return itemDTO;
         } else {
             return new OrderItemDTO();
         }
-
-
     }
 
     @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
@@ -104,7 +114,7 @@ public class OrderItemController {
         if (itemDTO.getId() == null) {
             throw new IllegalArgumentException("Id not found in the update request");
         }
-        if (orderService.chekOrder(itemDTO, clientId)) {
+        if (orderService.chekOrderByOrderItem(itemDTO, clientId)) {
             orderItemService.convertOrderItemDTOToOrderItem(itemDTO);
             orderService.calcTotalPrice(itemDTO.getOrderId());
             return itemDTO;

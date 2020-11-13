@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sber.internship.entity.Order;
 import ru.sber.internship.entity.OrderItem;
+import ru.sber.internship.entity.Product;
 import ru.sber.internship.entity.dto.OrderItemDTO;
 import ru.sber.internship.repository.OrderItemRepository;
 import ru.sber.internship.service.OrderItemService;
@@ -134,7 +135,7 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .count(o.getCount())
                 .orderId(o.getOrder().getId())
                 .productId(o.getProduct().getId())
-                .product(productService.convertProductToProductDTO(o.getProduct()))
+//                .product(productService.convertProductToProductDTO(o.getProduct()))
                 .build();
     }
 
@@ -148,5 +149,9 @@ public class OrderItemServiceImpl implements OrderItemService {
         return items.stream()
                 .map(i -> convertOrderItemDTOToOrderItem(i))
                 .collect(Collectors.toList());
+    }
+
+    public Product showProductByItemId(long itemId){
+        return orderItemRepository.findByProductId(itemId);
     }
 }
