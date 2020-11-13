@@ -8,10 +8,14 @@ import java.util.List;
 
 public interface OrderService {
     List<Order> findAll();
+
     Order findById(long id);
-    List<Order> findAllByClient(Client client);
+
     Order save(Order order);
+
     Order findOrderByIdAndAndClientId(Long orderId, Long clientId);
+
+    boolean deleteByIdAndClient_Id(long orderId, long clientId);
 
 
 }

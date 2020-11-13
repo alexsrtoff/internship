@@ -1,7 +1,6 @@
 package ru.sber.internship.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.sber.internship.entity.OrderItem;
 import ru.sber.internship.entity.dto.ClientDTO;
@@ -92,7 +91,6 @@ public class OrderItemController {
             orderService.calcTotalPrice(itemDTO.getOrderId());
             itemDTO.setId(orderItem.getId());
             itemDTO.setProductId(orderItem.getProduct().getId());
-//            itemDTO.setProduct(productService.convertProductToProductDTO(productService.findById(itemDTO.getProductId())));
             return itemDTO;
         } else {
             return new OrderItemDTO();

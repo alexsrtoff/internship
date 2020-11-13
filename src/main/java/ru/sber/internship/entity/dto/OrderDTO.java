@@ -22,7 +22,5 @@ public class OrderDTO {
 
     private Long clientId;
 
-//    private List<OrderItemDTO> items;
-
 
 }

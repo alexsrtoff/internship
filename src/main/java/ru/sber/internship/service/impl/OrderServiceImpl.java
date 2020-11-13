@@ -2,12 +2,9 @@ package ru.sber.internship.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.sber.internship.entity.Client;
 import ru.sber.internship.entity.Order;
-import ru.sber.internship.entity.OrderItem;
 import ru.sber.internship.entity.dto.OrderDTO;
 import ru.sber.internship.entity.dto.OrderItemDTO;
-import ru.sber.internship.entity.utils.OrderStatus;
 import ru.sber.internship.repository.OrderRepository;
 import ru.sber.internship.repository.ProductRepository;
 import ru.sber.internship.service.OrderService;
@@ -18,6 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+
 
     @Autowired
     OrderRepository orderRepository;
@@ -65,6 +63,17 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findOrderByIdAndAndClientId(orderId, clientId);
     }
 
+    @Override
+    public boolean deleteByIdAndClient_Id(long orderId, long clientId) {
+        Order order = orderRepository.findByIdAndAndClient_Id(orderId, clientId);
+        if (order == null) {
+            return false;
+        }
+        orderRepository.delete(order);
+        return true;
+
+    }
+
     public boolean deleteById(long id) {
         if (orderRepository.findById(id) == null) {
             return false;
@@ -73,10 +82,6 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
-    @Override
-    public List<Order> findAllByClient(Client client) {
-        return orderRepository.findAllByClient(client);
-    }
 
     public OrderDTO convertOrderToOrderDTO(Order order) {
         return OrderDTO.builder()
