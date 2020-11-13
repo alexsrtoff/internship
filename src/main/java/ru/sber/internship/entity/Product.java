@@ -30,7 +30,7 @@ public class Product {
 
     private int discount;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<OrderItem> orderItems;
 
 }

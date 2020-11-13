@@ -11,6 +11,7 @@ public interface OrderService {
     Order findById(long id);
     List<Order> findAllByClient(Client client);
     Order save(Order order);
-    BigDecimal calcTotalPrice(Order order);
+    Order findOrderByIdAndAndClientId(Long orderId, Long clientId);
+
 
 }

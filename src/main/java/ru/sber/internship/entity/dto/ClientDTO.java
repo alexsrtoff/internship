@@ -4,19 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.sber.internship.entity.Product;
-
-import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderItemDTO {
-
+public class ClientDTO {
     private Long id;
-    private int count;
-    private Long productId;
-    private Long orderId;
-    private ProductDTO product;
+
+    private String firstName;
+
+    private String lastName;
+
+    private String email;
+
 }

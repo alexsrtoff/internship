@@ -3,6 +3,7 @@ package ru.sber.internship.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sber.internship.entity.Product;
+import ru.sber.internship.entity.dto.ProductDTO;
 import ru.sber.internship.repository.ProductRepository;
 import ru.sber.internship.service.ProductService;
 
@@ -38,4 +39,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
+    public ProductDTO convertProductToProductDTO(Product product) {
+        return ProductDTO.builder()
+                .id(product.getId())
+                .description(product.getDescription())
+                .discount(product.getDiscount())
+                .name(product.getName())
+                .price(product.getPrice())
+                .build();
+    }
 }

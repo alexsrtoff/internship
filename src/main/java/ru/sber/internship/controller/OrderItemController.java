@@ -1,14 +1,15 @@
 package ru.sber.internship.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.sber.internship.entity.OrderItem;
-import ru.sber.internship.entity.Product;
+import ru.sber.internship.entity.dto.ClientDTO;
+import ru.sber.internship.entity.dto.OrderDTO;
 import ru.sber.internship.entity.dto.OrderItemDTO;
+import ru.sber.internship.service.impl.ClientServiceImpl;
 import ru.sber.internship.service.impl.OrderItemServiceImpl;
+import ru.sber.internship.service.impl.OrderServiceImpl;
 import ru.sber.internship.service.impl.ProductServiceImpl;
 
 import java.util.List;
@@ -23,60 +24,105 @@ public class OrderItemController {
     @Autowired
     ProductServiceImpl productService;
 
+    @Autowired
+    ClientServiceImpl clientService;
+
+    @Autowired
+    OrderServiceImpl orderService;
+
+
     @GetMapping
-    public List<OrderItem> findAll() {
-        return orderItemService.findAll();
+    public List<OrderItemDTO> findAll() {
+        return orderItemService.convertListOrderItemToListOrderItemDTO(orderItemService.findAll());
     }
 
+    @GetMapping("/{clientId}/all")
+    public List<OrderItemDTO> findAllByClientId(@PathVariable("clientId") Long clientId) {
+        return orderItemService.convertListOrderItemToListOrderItemDTO(orderItemService.findAllByOrderClientId(clientId));
+    }
+
+    @GetMapping("{itemId}/client")
+    public ClientDTO findClientByItemId(@PathVariable("itemId") Long id) {
+        OrderItem item = orderItemService.findById(id);
+        if (item == null) {
+            return new ClientDTO();
+        }
+        return clientService.convertClientToClientDTO(item.getOrder().getClient());
+    }
+
+    @GetMapping("{itemId}/order")
+    public OrderDTO findOrderByItemId(@PathVariable("itemId") Long id) {
+
+        OrderItem item = orderItemService.findById(id);
+        if (item == null) {
+            return new OrderDTO();
+        }
+        return orderService.convertOrderToOrderDTO(item.getOrder());
+    }
 
     @GetMapping("/{id}")
-    public OrderItem findById(@PathVariable(value = "id", required = true) int id) {
+    public OrderItem findById(@PathVariable(value = "id") long id) {
         if (orderItemService.findById(id) != null) {
             return orderItemService.findById(id);
         } else return new OrderItem();
     }
 
-
     @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
-    public OrderItem add(@RequestBody OrderItemDTO itemDTO) {
-        System.out.println(itemDTO);
-        OrderItem item = OrderItem.builder()
-                .id(itemDTO.getId())
-                .count(itemDTO.getCount())
-                .product(productService.findById(itemDTO.getProductId()))
-                .build();
+    public OrderItem add(@RequestBody OrderItem item) {
         return orderItemService.save(item);
     }
 
-    @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
-    private OrderItem update(@RequestBody OrderItem orderItem) {
-        if (orderItem.getId() == null) {
-            throw new IllegalArgumentException("Id not found in the create reuest");
+
+    @PostMapping(value = "/{clientId}/add", consumes = "application/json", produces = "application/json")
+    @Transactional
+    public OrderItemDTO addItemToClient(@RequestBody OrderItemDTO itemDTO, @PathVariable("clientId") Long clientId) {
+        if (orderService.chek(itemDTO, clientId)) {
+            OrderItem orderItem = orderItemService.convertOrderItemDTOToOrderItem(itemDTO);
+            orderService.calcTotalPrice(itemDTO.getOrderId());
+            itemDTO.setId(orderItem.getId());
+            itemDTO.setProduct(productService.convertProductToProductDTO(productService.findById(itemDTO.getProductId())));
+            return itemDTO;
+        } else {
+            return new OrderItemDTO();
         }
-       return orderItemService.save(orderItem);
+
+
     }
 
+    @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
+    public OrderItem update(@RequestBody OrderItem itemDTO) {
+
+        if (itemDTO.getId() == null) {
+            throw new IllegalArgumentException("Id not found in the update request");
+        }
+        return orderItemService.save(itemDTO);
+    }
+
+
+    @PutMapping(value = "/{clientId}/update", consumes = "application/json", produces = "application/json")
+    public OrderItemDTO updateClientItem(@RequestBody OrderItemDTO itemDTO, @PathVariable("clientId") Long clientId) {
+        if (itemDTO.getId() == null) {
+            throw new IllegalArgumentException("Id not found in the update request");
+        }
+        if (orderService.chek(itemDTO, clientId)) {
+            orderItemService.convertOrderItemDTOToOrderItem(itemDTO);
+            orderService.calcTotalPrice(itemDTO.getOrderId());
+            return itemDTO;
+        } else {
+            return new OrderItemDTO();
+        }
+    }
+
+
+    @DeleteMapping("/{clientId}/{id}")
+    public boolean deleteByClient(@PathVariable(value = "id") long id,
+                                  @PathVariable(value = "clientId") long clientId) {
+        return orderItemService.deleteById(id, clientId);
+    }
 
     @DeleteMapping("/{id}")
-    public boolean delete(@PathVariable(value = "id", required = true) int id) {
-        return orderItemService.deleteById(id);
+    public boolean delete(@PathVariable(value = "id") long id) {
+        return orderItemService.delete(id);
     }
-
-
-
-
-//    @PostMapping(value = "/add1", consumes = "application/json", produces = "application/json")
-//    public void  add1(@RequestBody Map<String, Object> map) {
-//        ObjectMapper mapper = new ObjectMapper();
-//        String json = String.valueOf(map.get("product"));
-//        try {
-//            Product product = mapper.readValue(json, Product.class);
-//            System.out.println("product: " + product);
-//
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
-//        map.forEach((k, v) -> System.out.printf("key: %s , value: %s", k, v).println());
-//    }
 
 }

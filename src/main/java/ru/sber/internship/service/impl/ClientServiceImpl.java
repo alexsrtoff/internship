@@ -3,6 +3,7 @@ package ru.sber.internship.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sber.internship.entity.Client;
+import ru.sber.internship.entity.dto.ClientDTO;
 import ru.sber.internship.repository.ClientRepository;
 import ru.sber.internship.service.ClientService;
 
@@ -16,8 +17,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<Client> findAll() {
-        List<Client> all = clientRepository.findAll();
-        return all;
+        return clientRepository.findAll();
     }
 
     @Override
@@ -36,6 +36,15 @@ public class ClientServiceImpl implements ClientService {
 
     public Client save(Client client) {
         return clientRepository.save(client);
+    }
+
+    public ClientDTO convertClientToClientDTO(Client client) {
+        return ClientDTO.builder()
+                .id(client.getId())
+                .email(client.getEmail())
+                .firstName(client.getFirstName())
+                .lastName(client.getLastName())
+                .build();
     }
 
 //    public Client getClientFromRequest(JsonNode node, ObjectMapper mapper) {

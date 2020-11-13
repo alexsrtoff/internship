@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.sber.internship.entity.Order;
 import ru.sber.internship.entity.OrderItem;
+import ru.sber.internship.entity.dto.OrderDTO;
 import ru.sber.internship.service.impl.ClientServiceImpl;
 import ru.sber.internship.service.impl.OrderItemServiceImpl;
 import ru.sber.internship.service.impl.OrderServiceImpl;
@@ -35,43 +36,61 @@ public class OrderController {
 
 
     @GetMapping("/{id}")
-    public Order findById(@PathVariable(value = "id", required = true) int id) {
+    public Order findById(@PathVariable(value = "id") int id) {
         if (orderService.findById(id) != null) {
             return orderService.findById(id);
         } else return new Order();
     }
 
-    @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
-    private Order update(@RequestBody Order order) {
-        if (order.getId() == null) {
-            throw new IllegalArgumentException("Id not found in the update reuest");
-        }
-        order.setTotalPrice(orderService.calcTotalPrice(order));
-        return orderService.save(order);
+//    @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
+//    private Order update(@RequestBody OrderDTO orderDTO) {
+//        if (orderDTO.getId() == null) {
+//            throw new IllegalArgumentException("Id not found in the update reuest");
+//        }
+//        orderService.transferOrderDTOToOrder(orderDTO);
+//        return orderService.save(order);
+//
+//    }
 
-    }
+
+
+//    @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
+//    private Order update(@RequestBody Order order) {
+//        if (order.getId() == null) {
+//            throw new IllegalArgumentException("Id not found in the update reuest");
+//        }
+//        order.setTotalPrice(orderService.calcTotalPrice(order));
+//        return orderService.save(order);
+//
+//    }
 
     @DeleteMapping("/{id}")
-    public boolean delete(@PathVariable(value = "id", required = true) long id) {
+    public boolean delete(@PathVariable(value = "id") long id) {
         return orderService.deleteById(id);
     }
 
-    @PostMapping(value = "/{clientId}/add", consumes = "application/json", produces = "application/json")
-    public Order add(@RequestBody String json, @PathVariable("clientId") long clientId) {
-        Order order = new Order();
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode node = mapper.readTree(json);
-            order = mapper.treeToValue(node.get("order"), Order.class);
-            List<OrderItem> orderItems = orderItemService.transferOrderItemsDTOToOrderItems(node, mapper, order);
-            order.setClient(clientService.findById(clientId));
-            order.setOrderItems(orderItems);
-            order.setTotalPrice(orderService.calcTotalPrice(order));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+    @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
+    public Order add(@RequestBody OrderDTO orderDTO) {
+        Order order = orderService.convertOrderDTOToOrder(orderDTO);
         return orderService.save(order);
     }
+
+//    @PostMapping(value = "/{clientId}/add", consumes = "application/json", produces = "application/json")
+//    public Order add(@RequestBody String json, @PathVariable("clientId") long clientId) {
+//        Order order = new Order();
+//        try {
+//            ObjectMapper mapper = new ObjectMapper();
+//            JsonNode node = mapper.readTree(json);
+//            order = mapper.treeToValue(node.get("order"), Order.class);
+//            List<OrderItem> orderItems = orderItemService.transferOrderItemsDTOToOrderItems(node, mapper, order);
+//            order.setClient(clientService.findById(clientId));
+//            order.setOrderItems(orderItems);
+//            order.setTotalPrice(orderService.calcTotalPrice(order));
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
+//        return orderService.save(order);
+//    }
 
 
 }
