@@ -13,7 +13,6 @@ import ru.sber.internship.repository.ProductRepository;
 import ru.sber.internship.service.OrderService;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -59,20 +58,6 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalPrice(totalPrice);
         save(order);
     }
-//    @Override
-//    public BigDecimal calcTotalPrice(Order order) {
-//        return order.getOrderItems().stream().map(orderItem -> orderItem
-//                .getProduct()
-//                .getPrice()
-//                .multiply(new BigDecimal(orderItem.getCount())))
-//                .reduce(BigDecimal.ZERO, BigDecimal::add);
-////        return order.getOrderItems().stream().
-////                map(p -> p.getProduct()
-////                        .getPrice()
-////                        .multiply(new BigDecimal(p.getCount()))).
-////                reduce(BigDecimal.ZERO, BigDecimal::add);
-////
-//    }
 
     @Override
     public Order findOrderByIdAndAndClientId(Long orderId, Long clientId) {
@@ -92,74 +77,6 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findAllByClient(client);
     }
 
-
-    public Order getOrder(OrderItemDTO itemDTO) {
-        List<OrderItem> orderItems = orderItemService.findAllByOrder_Id(itemDTO.getOrderId());
-        Order order = findById(itemDTO.getOrderId());
-        orderItems.add(orderItemService.convertOrderItemDTOToOrderItem(itemDTO));
-        order.setOrderItems(orderItems);
-//        order.setTotalPrice(calcTotalPrice(order));
-        return order;
-    }
-
-
-//    public Order getOrder(OrderItemDTO itemDTO, Long clientId) {
-//        Order order = null;
-//        if (itemDTO.getOrderId() == null) {
-//            return createOrder(itemDTO, clientId);
-//        }
-//        order = findOrderByIdAndAndClientId(itemDTO.getOrderId(), clientId);
-//        if (order == null) {
-//            return createOrder(itemDTO, clientId);
-//        } else {
-//            System.out.println(order.getOrderItems());
-//            return order;
-//        }
-//
-//    }
-
-
-
-    public Order createOrder(OrderItemDTO itemDTO, Long clientId) {
-        OrderItem orderItem = orderItemService.convertOrderItemDTOToOrderItem(itemDTO);
-        List<OrderItem> items = new ArrayList<>();
-        items.add(orderItem);
-        return save(Order.builder()
-                .client(clientService.findById(clientId))
-                .orderStatus(OrderStatus.UNPAYED)
-                .totalPrice(productService
-                        .findById(itemDTO.getProductId())
-                        .getPrice().multiply(new BigDecimal(itemDTO.getCount())))
-                .orderItems(items)
-                .build());
-    }
-
-
-
-//    public Order createOrder(OrderItemDTO itemDTO, Long clientId) {
-//        return save(Order.builder()
-//                .client(clientService.findById(clientId))
-//                .orderStatus(OrderStatus.UNPAYED)
-//                .totalPrice(productService
-//                        .findById(itemDTO.getProductId())
-//                        .getPrice().multiply(new BigDecimal(itemDTO.getCount())))
-//                .build());
-//    }
-
-    public Order chekOrder(OrderItemDTO itemDTO, Long clientId) {
-        Order order = findOrderByIdAndAndClientId(itemDTO.getOrderId(), clientId);
-        if (itemDTO.getOrderId() == null || order == null) {
-            return save(Order.builder()
-                    .client(clientService.findById(clientId))
-                    .orderStatus(OrderStatus.UNPAYED)
-                    .totalPrice(productService
-                            .findById(itemDTO.getProductId())
-                            .getPrice().multiply(new BigDecimal(itemDTO.getCount())))
-                    .build());
-        } else return order;
-
-    }
-
     public OrderDTO convertOrderToOrderDTO(Order order) {
         return OrderDTO.builder()
                 .id(order.getId())
@@ -168,7 +85,7 @@ public class OrderServiceImpl implements OrderService {
                 .build();
     }
 
-    public boolean chek(OrderItemDTO itemDTO, Long clientId) {
+    public boolean chekOrder(OrderItemDTO itemDTO, Long clientId) {
         return findOrderByIdAndAndClientId(itemDTO.getOrderId(), clientId) != null;
     }
 
@@ -182,30 +99,4 @@ public class OrderServiceImpl implements OrderService {
                 .build();
     }
 
-//    public Order transferOrderDTOToOrder(OrderDTO orderDTO) {
-//        List<OrderItemDTO> itemDTOList = orderDTO.getItemDTOList();
-//        List<OrderItem> items = new ArrayList<>();
-//        itemDTOList.forEach(o -> {
-//            OrderItem item = OrderItem.builder()
-//                    .id(o.getId())
-//                    .count(o.getCount())
-//                    .order(findById(orderDTO.getId()))
-//                    .product(productRepository.findById(o.getProductId()))
-//                    .build();
-//            items.add(item);
-//        });
-//    }
-
-
-//    public Order getOrderFromRequest(JsonNode node, ObjectMapper mapper) {
-//        JsonNode orderNode = node.get("order");
-//        Order order = null;
-//        try {
-//            order = mapper.treeToValue(orderNode, Order.class);
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return order;
-//    }
 }

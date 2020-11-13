@@ -76,7 +76,7 @@ public class OrderItemController {
     @PostMapping(value = "/{clientId}/add", consumes = "application/json", produces = "application/json")
     @Transactional
     public OrderItemDTO addItemToClient(@RequestBody OrderItemDTO itemDTO, @PathVariable("clientId") Long clientId) {
-        if (orderService.chek(itemDTO, clientId)) {
+        if (orderService.chekOrder(itemDTO, clientId)) {
             OrderItem orderItem = orderItemService.convertOrderItemDTOToOrderItem(itemDTO);
             orderService.calcTotalPrice(itemDTO.getOrderId());
             itemDTO.setId(orderItem.getId());
@@ -104,7 +104,7 @@ public class OrderItemController {
         if (itemDTO.getId() == null) {
             throw new IllegalArgumentException("Id not found in the update request");
         }
-        if (orderService.chek(itemDTO, clientId)) {
+        if (orderService.chekOrder(itemDTO, clientId)) {
             orderItemService.convertOrderItemDTOToOrderItem(itemDTO);
             orderService.calcTotalPrice(itemDTO.getOrderId());
             return itemDTO;

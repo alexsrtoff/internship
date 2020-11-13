@@ -54,10 +54,6 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     }
 
-    @Override
-    public List<OrderItem> findAllByOrder(Order order) {
-        return findAllByOrder(order);
-    }
 
     @Override
     public OrderItem save(OrderItem orderItem) {
