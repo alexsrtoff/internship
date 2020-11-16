@@ -19,17 +19,30 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     OrderServiceImpl orderService;
 
+    /**
+     * finds all clients in the database
+     * @return
+     */
     @Override
     public List<Client> findAll() {
         return clientRepository.findAll();
     }
 
+    /**
+     * finds a client by Id
+     * @param id
+     * @return
+     */
     @Override
     public Client findById(long id) {
         return clientRepository.findById(id);
     }
 
-
+    /**
+     * deletes the client by Id
+     * @param id
+     * @return
+     */
     public boolean deleteById(long id) {
         if (clientRepository.findById(id) == null) {
             return false;
@@ -38,10 +51,21 @@ public class ClientServiceImpl implements ClientService {
         return true;
     }
 
+    /**
+     * Save clenn in the database
+     * @param client
+     * @return
+     */
     public Client save(Client client) {
         return clientRepository.save(client);
     }
 
+
+    /**
+     * Converts Client to ClienDTO
+     * @param client
+     * @return
+     */
     public ClientDTO convertClientToClientDTO(Client client) {
         return ClientDTO.builder()
                 .id(client.getId())
@@ -51,10 +75,20 @@ public class ClientServiceImpl implements ClientService {
                 .build();
     }
 
+    /**
+     * Converts the Client list to the ClientDTO list
+     * @param clientList
+     * @return
+     */
     public List<ClientDTO> convertClientListToClientDTOList(List<Client> clientList) {
         return clientList.stream().map(c -> convertClientToClientDTO(c)).collect(Collectors.toList());
     }
 
+    /**
+     *Converts Client to ClienDTO and save it in the database
+     * @param clientDTO
+     * @return
+     */
     public Client convertClientDTOToClient(ClientDTO clientDTO) {
         return save(Client.builder()
                 .id(clientDTO.getId())
