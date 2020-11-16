@@ -1,10 +1,7 @@
 package ru.sber.internship.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -16,8 +13,9 @@ import java.util.List;
 @Table(name = "products")
 @Getter
 @Setter
-@ToString(of = {"id", "name", "description", "price", "discount"})
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
 
     @Id
@@ -35,7 +33,5 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<OrderItem> orderItems;
 
-    public Product() {
 
-    }
 }

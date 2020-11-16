@@ -10,7 +10,7 @@ import ru.sber.internship.service.impl.ProductServiceImpl;
 import java.util.List;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping(value = "/products", produces = {"application/json", "application/xml"})
 public class ProductController {
     @Autowired
     private ProductServiceImpl productService;
@@ -31,7 +31,7 @@ public class ProductController {
     }
 
     @Transactional
-    @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/add", consumes = {"application/json", "application/xml"})
     public ProductDTO add(@RequestBody ProductDTO productDTO) {
         Product product = productService.findById(productDTO.getId());
         if (product != null) {
@@ -43,7 +43,7 @@ public class ProductController {
     }
 
     @Transactional
-    @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/update", consumes = {"application/json", "application/xml"})
     public ProductDTO update(@RequestBody ProductDTO productDTO) {
         Product product = productService.findById(productDTO.getId());
         if (product == null) {

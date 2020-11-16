@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping(value = "/orders", produces = {"application/json", "application/xml"})
 public class OrderController {
 
 
@@ -77,7 +77,7 @@ public class OrderController {
     }
 
 
-    @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/add", consumes = {"application/json", "application/xml"})
     @Transactional
     public OrderDTO add(@RequestBody OrderDTO orderDTO) {
         if (orderDTO.getId() != null) orderDTO.setId(null);
@@ -85,7 +85,7 @@ public class OrderController {
         return orderService.convertOrderToOrderDTO(orderService.save(order));
     }
 
-    @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/update", consumes = {"application/json", "application/xml"})
     @Transactional
     public OrderDTO update(@RequestBody OrderDTO orderDTO) {
         if (orderService.chekOrder(orderDTO)) {

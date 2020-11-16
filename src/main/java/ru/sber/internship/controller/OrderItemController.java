@@ -17,7 +17,7 @@ import ru.sber.internship.service.impl.ProductServiceImpl;
 import java.util.List;
 
 @RestController
-@RequestMapping("/items")
+@RequestMapping(value = "/items", produces = {"application/json", "application/xml"})
 public class OrderItemController {
 
     @Autowired
@@ -78,13 +78,13 @@ public class OrderItemController {
         } else return new ProductDTO();
     }
 
-    @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/add", consumes = {"application/json", "application/xml"})
     public OrderItem add(@RequestBody OrderItem item) {
         return orderItemService.save(item);
     }
 
 
-    @PostMapping(value = "/{clientId}/add", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/{clientId}/add", consumes = {"application/json", "application/xml"})
     @Transactional
     public OrderItemDTO addItemToClient(@RequestBody OrderItemDTO itemDTO, @PathVariable("clientId") Long clientId) {
         if (orderService.chekOrderByOrderItem(itemDTO, clientId)) {
@@ -99,7 +99,7 @@ public class OrderItemController {
         }
     }
 
-    @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/update", consumes = {"application/json", "application/xml"})
     public OrderItem update(@RequestBody OrderItem itemDTO) {
         if (itemDTO.getId() == null) {
             throw new IllegalArgumentException("Id not found in the update request");
@@ -108,7 +108,7 @@ public class OrderItemController {
     }
 
 
-    @PutMapping(value = "/{clientId}/update", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/{clientId}/update", consumes = {"application/json", "application/xml"})
     @Transactional
     public OrderItemDTO updateClientItem(@RequestBody OrderItemDTO itemDTO, @PathVariable("clientId") Long clientId) {
         if (itemDTO.getId() == null) {

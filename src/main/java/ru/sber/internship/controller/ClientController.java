@@ -1,6 +1,5 @@
 package ru.sber.internship.controller;
 
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,7 @@ import ru.sber.internship.service.impl.OrderServiceImpl;
 import java.util.List;
 
 @RestController
-@RequestMapping("/clients")
+@RequestMapping(value = "/clients", produces = {"application/json", "application/xml"})
 public class ClientController {
 
     @Autowired
@@ -23,7 +22,6 @@ public class ClientController {
     OrderServiceImpl orderService;
 
     @GetMapping
-    @ApiOperation(value = "Show all clients")
     public List<ClientDTO> findAll() {
         return clientService.convertClientListToClientDTOList(clientService.findAll());
     }
@@ -43,7 +41,7 @@ public class ClientController {
                 .convertOrderListToOrderDTOList(orderService.findAllByClient_Id(clientId));
     }
 
-    @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/add", consumes = {"application/json", "application/xml"})
     @Transactional
     public ClientDTO add(@RequestBody ClientDTO clientDTO) {
         Client client = clientService.findById(clientDTO.getId());
@@ -54,7 +52,7 @@ public class ClientController {
         return clientService.convertClientToClientDTO(newClient);
     }
 
-    @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/update", consumes = {"application/json", "application/xml"})
     @Transactional
     public ClientDTO update(@RequestBody ClientDTO clientDTO) {
         Client client = clientService.findById(clientDTO.getId());

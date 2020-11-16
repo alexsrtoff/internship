@@ -1,16 +1,17 @@
-//package ru.sber.internship;
-//
-//
-//import org.junit.jupiter.api.Test;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import sun.jvm.hotspot.utilities.Assert;
-//
-//@SpringBootTest
-//class InternshipApplicationTests {
-//
-//    @Test
-//    void contextLoads() {
-//        assert equals(true);
-//    }
-//
-//}
+package ru.sber.internship;
+
+
+import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+class InternshipApplicationTests {
+
+    @Test
+    void contextLoads() throws Exception {
+    }
+
+}

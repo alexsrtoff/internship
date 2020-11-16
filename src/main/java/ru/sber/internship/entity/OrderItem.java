@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(of = {"id", "count"})
 @Builder
 public class OrderItem {
 
