@@ -8,7 +8,6 @@ import ru.sber.internship.entity.dto.OrderDTO;
 import ru.sber.internship.entity.dto.OrderItemDTO;
 import ru.sber.internship.entity.utils.OrderStatus;
 import ru.sber.internship.repository.OrderRepository;
-import ru.sber.internship.repository.ProductRepository;
 import ru.sber.internship.service.OrderService;
 
 import java.math.BigDecimal;
@@ -23,14 +22,14 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     OrderRepository orderRepository;
 
-    @Autowired
-    ProductRepository productRepository;
+//    @Autowired
+//    ProductRepository productRepository;
 
     @Autowired
     ClientServiceImpl clientService;
 
-    @Autowired
-    ProductServiceImpl productService;
+//    @Autowired
+//    ProductServiceImpl productService;
 
     @Autowired
     OrderItemServiceImpl orderItemService;
@@ -68,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean deleteByIdAndClient_Id(long orderId, long clientId) {
-        Order order = orderRepository.findByIdAndClient_Id(orderId, clientId);
+        Order order = findByIdAndClient_Id(orderId, clientId);
         if (order == null) {
             return false;
         }
@@ -80,6 +79,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> findAllByClient_Id(long id) {
         return orderRepository.findAllByClient_Id(id);
+    }
+
+    @Override
+    public Order findByIdAndClient_Id(long orderId, long clientId) {
+        return orderRepository.findByIdAndClient_Id(orderId, clientId);
     }
 
     public boolean deleteById(long id) {
@@ -103,8 +107,6 @@ public class OrderServiceImpl implements OrderService {
     public boolean chekOrderByOrderItem(OrderItemDTO itemDTO, Long clientId) {
         Order order = findOrderByIdAndAndClientId(itemDTO.getOrderId(), clientId);
         return order != null && order.getOrderStatus().equals(OrderStatus.UNPAYED);
-
-//        return findOrderByIdAndAndClientId(itemDTO.getOrderId(), clientId) != null;
     }
 
     public boolean chekOrder(OrderDTO orderDTO) {
