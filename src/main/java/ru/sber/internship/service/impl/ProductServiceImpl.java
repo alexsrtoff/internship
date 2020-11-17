@@ -20,20 +20,43 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     OrderItemServiceImpl orderItemService;
 
+    /**
+     * finds all clients
+     *
+     * @return
+     */
     @Override
     public List<Product> findAll() {
         return productRepository.findAll();
     }
 
+    /**
+     * finds product by Id
+     *
+     * @param id
+     * @return
+     */
     @Override
     public Product findById(long id) {
         return productRepository.findById(id);
     }
 
+    /**
+     * Save Product
+     *
+     * @param product
+     * @return
+     */
     public Product save(Product product) {
         return productRepository.save(product);
     }
 
+    /**
+     * deletes Product by Id
+     *
+     * @param id
+     * @return
+     */
     public boolean deleteById(long id) {
         if (productRepository.findById(id) == null) {
             return false;
@@ -42,6 +65,12 @@ public class ProductServiceImpl implements ProductService {
         return true;
     }
 
+    /**
+     * converts Product to ProductDTO
+     *
+     * @param product
+     * @return
+     */
     public ProductDTO convertProductToProductDTO(Product product) {
         return ProductDTO.builder()
                 .id(product.getId())
@@ -52,16 +81,34 @@ public class ProductServiceImpl implements ProductService {
                 .build();
     }
 
+    /**
+     * creates a list of ProductsDTO  from the IrderItem list
+     *
+     * @param items
+     * @return
+     */
     public List<ProductDTO> createProductDTOList(List<OrderItem> items) {
 
         return items.stream().map(p -> convertProductToProductDTO(p.getProduct())).collect(Collectors.toList());
     }
 
+    /**
+     * converts a list of Products to the ProductDTO list
+     *
+     * @param items
+     * @return
+     */
     public List<ProductDTO> convertProductListToProductDTOList(List<Product> items) {
 
         return items.stream().map(p -> convertProductToProductDTO(p)).collect(Collectors.toList());
     }
 
+    /**
+     * converts a list of ProductDTO to the Products list
+     *
+     * @param productDTO
+     * @return
+     */
     public Product convertProductDTOToProduct(ProductDTO productDTO) {
         return save(Product.builder()
                 .id(productDTO.getId())

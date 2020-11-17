@@ -1,10 +1,7 @@
 package ru.sber.internship.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import ru.sber.internship.entity.utils.OrderStatus;
@@ -12,13 +9,15 @@ import ru.sber.internship.entity.utils.OrderStatus;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "orders")
-@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
 public class Order {
 
     @Id
@@ -38,7 +37,26 @@ public class Order {
     private List<OrderItem> orderItems;
 
     @JsonIgnore
-    public Client getClient(){return client;}
+    public Client getClient() {
+        return client;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Order)) return false;
+        Order order = (Order) o;
+        return Objects.equals(id, order.id) &&
+                Objects.equals(totalPrice, order.totalPrice) &&
+                orderStatus == order.orderStatus &&
+                Objects.equals(client, order.client) &&
+                Objects.equals(orderItems, order.orderItems);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, totalPrice, orderStatus, client, orderItems);
+    }
 
     @Override
     public String toString() {
@@ -46,6 +64,8 @@ public class Order {
                 "id=" + id +
                 ", totalPrice=" + totalPrice +
                 ", orderStatus=" + orderStatus +
+                ", client=" + client +
+                ", orderItems=" + orderItems +
                 '}';
     }
 }

@@ -3,7 +3,6 @@ package ru.sber.internship.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.sber.internship.entity.OrderItem;
-import ru.sber.internship.entity.Product;
 
 import java.util.List;
 
@@ -14,9 +13,9 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
     OrderItem findOrderItemByIdAndOrderClientId(Long id, Long clientId);
 
-    List<OrderItem> findAllByOrder_Client_Id(Long clientId);
+    List<OrderItem> findAllByOrderClientId(Long clientId);
 
-    List<OrderItem> findAllByOrder_Id(long orderId);
+    List<OrderItem> findAllByOrderId(long orderId);
 
     void deleteById(long id);
 

@@ -10,7 +10,7 @@ import ru.sber.internship.service.impl.ProductServiceImpl;
 import java.util.List;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping(value = "/products", produces = {"application/json", "application/xml"})
 public class ProductController {
     @Autowired
     private ProductServiceImpl productService;
@@ -18,7 +18,8 @@ public class ProductController {
 
     @GetMapping
     public List<ProductDTO> findAll() {
-        return productService.convertProductListToProductDTOList(productService.findAll());
+        List<Product> products = productService.findAll();
+        return productService.convertProductListToProductDTOList(products);
     }
 
 
@@ -31,11 +32,11 @@ public class ProductController {
     }
 
     @Transactional
-    @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/add", consumes = {"application/json", "application/xml"})
     public ProductDTO add(@RequestBody ProductDTO productDTO) {
         Product product = productService.findById(productDTO.getId());
         if (product != null) {
-            return new ProductDTO();
+            return update(productDTO);
         }
         Product newProduct = productService.convertProductDTOToProduct(productDTO);
         productDTO.setId(newProduct.getId());
@@ -43,11 +44,11 @@ public class ProductController {
     }
 
     @Transactional
-    @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/update", consumes = {"application/json", "application/xml"})
     public ProductDTO update(@RequestBody ProductDTO productDTO) {
         Product product = productService.findById(productDTO.getId());
         if (product == null) {
-            return new ProductDTO();
+            return add(productDTO);
         }
         productService.convertProductDTOToProduct(productDTO);
         return productDTO;

@@ -1,14 +1,15 @@
 package ru.sber.internship.entity.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.stereotype.Component;
 
-@Data
+import java.util.Objects;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
 public class ClientDTO {
     private Long id;
 
@@ -17,5 +18,22 @@ public class ClientDTO {
     private String lastName;
 
     private String email;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ClientDTO)) return false;
+        ClientDTO clientDTO = (ClientDTO) o;
+        return Objects.equals(id, clientDTO.id) &&
+                Objects.equals(firstName, clientDTO.firstName) &&
+                Objects.equals(lastName, clientDTO.lastName) &&
+                Objects.equals(email, clientDTO.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, email);
+    }
+
 
 }

@@ -11,7 +11,10 @@ public interface OrderItemService {
 
     List<OrderItem> findAllByOrderClientId(Long clientId);
 
-    List<OrderItem> findAllByOrder_Id(long orderId);
+    List<OrderItem> findAllByOrderId(long orderId);
 
     List<OrderItem> findAllByProductId(long productId);
+
+    OrderItem findOrderItemByIdAndOrderClientId(Long id, Long clientId);
+
 }
