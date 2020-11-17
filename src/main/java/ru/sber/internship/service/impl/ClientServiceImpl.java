@@ -8,12 +8,16 @@ import ru.sber.internship.repository.ClientRepository;
 import ru.sber.internship.service.ClientService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ClientServiceImpl implements ClientService {
 
     @Autowired
     ClientRepository clientRepository;
+
+    @Autowired
+    OrderServiceImpl orderService;
 
     @Override
     public List<Client> findAll() {
@@ -45,5 +49,19 @@ public class ClientServiceImpl implements ClientService {
                 .firstName(client.getFirstName())
                 .lastName(client.getLastName())
                 .build();
+    }
+
+    public List<ClientDTO> convertClientListToClientDTOList(List<Client> clientList) {
+        return clientList.stream().map(c -> convertClientToClientDTO(c)).collect(Collectors.toList());
+    }
+
+    public Client convertClientDTOToClient(ClientDTO clientDTO) {
+        return save(Client.builder()
+                .id(clientDTO.getId())
+                .firstName(clientDTO.getFirstName())
+                .lastName(clientDTO.getLastName())
+                .email(clientDTO.getEmail())
+                .orders(orderService.findAllByClient_Id(clientDTO.getId()))
+                .build());
     }
 }

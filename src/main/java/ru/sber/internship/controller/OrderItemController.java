@@ -54,7 +54,6 @@ public class OrderItemController {
 
     @GetMapping("{itemId}/order")
     public OrderDTO findOrderByItemId(@PathVariable("itemId") Long id) {
-
         OrderItem item = orderItemService.findById(id);
         if (item == null) {
             return new OrderDTO();
@@ -72,9 +71,8 @@ public class OrderItemController {
     }
 
     @GetMapping("{itemId}/product")
-    public ProductDTO showProductByItemId(@PathVariable("itemId") Long id){
+    public ProductDTO showProductByItemId(@PathVariable("itemId") Long id) {
         OrderItem item = orderItemService.findById(id);
-
         if (item != null) {
             return productService.convertProductToProductDTO(item.getProduct());
         } else return new ProductDTO();
@@ -103,7 +101,6 @@ public class OrderItemController {
 
     @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
     public OrderItem update(@RequestBody OrderItem itemDTO) {
-
         if (itemDTO.getId() == null) {
             throw new IllegalArgumentException("Id not found in the update request");
         }
@@ -137,5 +134,4 @@ public class OrderItemController {
     public boolean delete(@PathVariable(value = "id") long id) {
         return orderItemService.delete(id);
     }
-
 }

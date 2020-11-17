@@ -1,8 +1,10 @@
 package ru.sber.internship.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.sber.internship.entity.Product;
+import ru.sber.internship.entity.dto.ProductDTO;
 import ru.sber.internship.service.impl.ProductServiceImpl;
 
 import java.util.List;
@@ -15,39 +17,45 @@ public class ProductController {
 
 
     @GetMapping
-    public List<Product> findAll() {
-        return productService.findAll();
+    public List<ProductDTO> findAll() {
+        return productService.convertProductListToProductDTOList(productService.findAll());
     }
 
 
     @GetMapping("/{id}")
-    public Product findById(@PathVariable(value = "id", required = true) int id) {
-        if (productService.findById(id) != null) {
-            return productService.findById(id);
-        } else return new Product();
+    public ProductDTO findById(@PathVariable(value = "id") int id) {
+        Product product = productService.findById(id);
+        if (product != null) {
+            return productService.convertProductToProductDTO(product);
+        } else return new ProductDTO();
     }
 
-
+    @Transactional
     @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
-    public void add(@RequestBody Product product) {
-        if (product.getId() != null) {
-            throw new IllegalArgumentException("Id found in the create reuest");
+    public ProductDTO add(@RequestBody ProductDTO productDTO) {
+        Product product = productService.findById(productDTO.getId());
+        if (product != null) {
+            return new ProductDTO();
         }
-        productService.save(product);
+        Product newProduct = productService.convertProductDTOToProduct(productDTO);
+        productDTO.setId(newProduct.getId());
+        return productDTO;
     }
 
+    @Transactional
     @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
-    private void update(@RequestBody Product product) {
-        if (product.getId() == null) {
-            throw new IllegalArgumentException("Id not found in the create reuest");
+    public ProductDTO update(@RequestBody ProductDTO productDTO) {
+        Product product = productService.findById(productDTO.getId());
+        if (product == null) {
+            return new ProductDTO();
         }
-        productService.save(product);
-
+        productService.convertProductDTOToProduct(productDTO);
+        return productDTO;
     }
 
 
     @DeleteMapping("/{id}")
-    public boolean delete(@PathVariable(value = "id", required = true) long id) {
+    public boolean delete(@PathVariable(value = "id") long id) {
         return productService.deleteById(id);
     }
 

@@ -63,18 +63,23 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order findOrderByIdAndAndClientId(Long orderId, Long clientId) {
-        return orderRepository.findOrderByIdAndAndClientId(orderId, clientId);
+        return orderRepository.findOrderByIdAndClientId(orderId, clientId);
     }
 
     @Override
     public boolean deleteByIdAndClient_Id(long orderId, long clientId) {
-        Order order = orderRepository.findByIdAndAndClient_Id(orderId, clientId);
+        Order order = orderRepository.findByIdAndClient_Id(orderId, clientId);
         if (order == null) {
             return false;
         }
         orderRepository.delete(order);
         return true;
 
+    }
+
+    @Override
+    public List<Order> findAllByClient_Id(long id) {
+        return orderRepository.findAllByClient_Id(id);
     }
 
     public boolean deleteById(long id) {

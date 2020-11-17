@@ -69,6 +69,11 @@ public class OrderItemServiceImpl implements OrderItemService {
         return orderItemRepository.findAllByOrder_Id(orderId);
     }
 
+    @Override
+    public List<OrderItem> findAllByProductId(long productId) {
+        return orderItemRepository.findAllByProductId(productId);
+    }
+
 
     public List<OrderItemDTO> getOrderItemsDTOFromRequest(JsonNode node, ObjectMapper mapper) {
         JsonNode orderItemsNone = node.get("orderItemsDTO");
@@ -113,9 +118,5 @@ public class OrderItemServiceImpl implements OrderItemService {
         return items.stream()
                 .map(i -> convertOrderItemDTOToOrderItem(i))
                 .collect(Collectors.toList());
-    }
-
-    public Product showProductByItemId(long itemId) {
-        return orderItemRepository.findByProductId(itemId);
     }
 }

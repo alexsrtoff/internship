@@ -1,56 +1,71 @@
 package ru.sber.internship.controller;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.sber.internship.entity.Client;
+import ru.sber.internship.entity.dto.ClientDTO;
+import ru.sber.internship.entity.dto.OrderDTO;
 import ru.sber.internship.service.impl.ClientServiceImpl;
+import ru.sber.internship.service.impl.OrderServiceImpl;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/clients")
-@Api(value = "Clients", description = "Operations related to clients")
 public class ClientController {
 
     @Autowired
     ClientServiceImpl clientService;
 
+    @Autowired
+    OrderServiceImpl orderService;
+
     @GetMapping
     @ApiOperation(value = "Show all clients")
-    public List<Client> findAll() {
-        return clientService.findAll();
+    public List<ClientDTO> findAll() {
+        return clientService.convertClientListToClientDTOList(clientService.findAll());
     }
 
-    @ApiOperation(value = "Search a client with an ID")
     @GetMapping("/{id}")
-    public Client findClientById(@PathVariable(value = "id", required = true) int id) {
-        if (clientService.findById(id) != null) {
-            return clientService.findById(id);
-        } else return new Client();
+    public ClientDTO findClientById(@PathVariable(value = "id") int id) {
+        Client client = clientService.findById(id);
+        if (client != null) {
+            return clientService.convertClientToClientDTO(client);
+        } else return new ClientDTO();
     }
 
-    @ApiOperation(value = "Add new client")
+    @GetMapping("/{clientId}/orders")
+    public List<OrderDTO> showOrdersByClientId(@PathVariable("clientId") long clientId) {
+
+        return orderService
+                .convertOrderListToOrderDTOList(orderService.findAllByClient_Id(clientId));
+    }
+
     @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
-    public Client add(@RequestBody Client client) {
-        if (client.getId() != null) {
-            throw new IllegalArgumentException("Id found in the create reuest");
+    @Transactional
+    public ClientDTO add(@RequestBody ClientDTO clientDTO) {
+        Client client = clientService.findById(clientDTO.getId());
+        if (client != null) {
+            return clientService.convertClientToClientDTO(client);
         }
-        return clientService.save(client);
+        Client newClient = clientService.convertClientDTOToClient(clientDTO);
+        return clientService.convertClientToClientDTO(newClient);
     }
 
-    @ApiOperation(value = "Update a client")
     @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
-    private Client update(@RequestBody Client client) {
+    @Transactional
+    public ClientDTO update(@RequestBody ClientDTO clientDTO) {
+        Client client = clientService.findById(clientDTO.getId());
         if (client.getId() == null) {
-            throw new IllegalArgumentException("Id not found in the create reuest");
+            return new ClientDTO();
         }
-        return clientService.save(client);
+        clientService.convertClientDTOToClient(clientDTO);
+        return clientDTO;
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "Delete client")
     public boolean delete(@PathVariable(value = "id") int id) {
         return clientService.deleteById(id);
     }

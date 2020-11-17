@@ -17,6 +17,8 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    OrderItemServiceImpl orderItemService;
 
     @Override
     public List<Product> findAll() {
@@ -53,5 +55,21 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> createProductDTOList(List<OrderItem> items) {
 
         return items.stream().map(p -> convertProductToProductDTO(p.getProduct())).collect(Collectors.toList());
+    }
+
+    public List<ProductDTO> convertProductListToProductDTOList(List<Product> items) {
+
+        return items.stream().map(p -> convertProductToProductDTO(p)).collect(Collectors.toList());
+    }
+
+    public Product convertProductDTOToProduct(ProductDTO productDTO) {
+        return save(Product.builder()
+                .id(productDTO.getId())
+                .description(productDTO.getDescription())
+                .discount(productDTO.getDiscount())
+                .name(productDTO.getName())
+                .orderItems(orderItemService.findAllByProductId(productDTO.getId()))
+                .price(productDTO.getPrice())
+                .build());
     }
 }

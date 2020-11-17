@@ -1,6 +1,7 @@
 package ru.sber.internship.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,6 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString(of = {"id", "name", "description", "price", "discount"})
+@Builder
 public class Product {
 
     @Id
@@ -33,4 +35,7 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<OrderItem> orderItems;
 
+    public Product() {
+
+    }
 }

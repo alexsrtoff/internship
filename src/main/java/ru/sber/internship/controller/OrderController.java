@@ -1,6 +1,7 @@
 package ru.sber.internship.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.sber.internship.entity.Order;
 import ru.sber.internship.entity.dto.ClientDTO;
@@ -66,7 +67,7 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}/items")
-    public List<OrderItemDTO> showOrderItemsByOrderId(@PathVariable("orderId") Long id){
+    public List<OrderItemDTO> showOrderItemsByOrderId(@PathVariable("orderId") Long id) {
         List<OrderItemDTO> itemDTOS = new ArrayList<>();
         Order order = orderService.findById(id);
         if (order != null) {
@@ -77,6 +78,7 @@ public class OrderController {
 
 
     @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
+    @Transactional
     public OrderDTO add(@RequestBody OrderDTO orderDTO) {
         if (orderDTO.getId() != null) orderDTO.setId(null);
         Order order = orderService.convertOrderDTOToOrder(orderDTO);
@@ -84,6 +86,7 @@ public class OrderController {
     }
 
     @PutMapping(value = "/update", consumes = "application/json", produces = "application/json")
+    @Transactional
     public OrderDTO update(@RequestBody OrderDTO orderDTO) {
         if (orderService.chekOrder(orderDTO)) {
             Order order = orderService.findById(orderDTO.getId());
@@ -104,8 +107,4 @@ public class OrderController {
                                   @PathVariable(value = "clientId") long clientId) {
         return orderService.deleteByIdAndClient_Id(id, clientId);
     }
-
-
-
-
 }
