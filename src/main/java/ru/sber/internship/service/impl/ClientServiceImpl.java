@@ -20,7 +20,7 @@ public class ClientServiceImpl implements ClientService {
     OrderServiceImpl orderService;
 
     /**
-     * show all Clients in the database
+     * finds all Clients
      * @return
      */
     @Override
@@ -52,7 +52,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     /**
-     * Save clent in the database
+     * Save client
      * @param client
      * @return
      */
@@ -85,7 +85,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     /**
-     *Converts Client to ClienDTO and save it in the database
+     *Converts Client to ClienDTO and save it
      * @param clientDTO
      * @return
      */

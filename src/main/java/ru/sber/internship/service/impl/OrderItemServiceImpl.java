@@ -1,8 +1,5 @@
 package ru.sber.internship.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sber.internship.entity.OrderItem;
@@ -10,8 +7,6 @@ import ru.sber.internship.entity.dto.OrderItemDTO;
 import ru.sber.internship.repository.OrderItemRepository;
 import ru.sber.internship.service.OrderItemService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,23 +22,47 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Autowired
     OrderServiceImpl orderService;
 
+    /**
+     * finds all OrderItems
+     *
+     * @return
+     */
     @Override
     public List<OrderItem> findAll() {
         return orderItemRepository.findAll();
     }
 
+    /**
+     * finds an OrderItem by Id
+     *
+     * @param id
+     * @return
+     */
     public OrderItem findById(long id) {
         return orderItemRepository.findById(id);
     }
 
+    /**
+     * deletes an OrderItem by OrderItemId and ClientId
+     *
+     * @param id
+     * @param clienId
+     * @return
+     */
     public boolean deleteById(long id, long clienId) {
-        if (orderItemRepository.findOrderItemByIdAndOrderClientId(id, clienId) == null) {
+        if (findOrderItemByIdAndOrderClientId(id, clienId) == null) {
             return false;
         }
         orderItemRepository.deleteById(id);
         return true;
     }
 
+    /**
+     * deletes an OrderItem by OrderItemId
+     *
+     * @param id
+     * @return
+     */
     public boolean delete(long id) {
         if (orderItemRepository.findById(id) == null) {
             return false;
@@ -53,41 +72,68 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     }
 
+    /**
+     * Saves OrderItem
+     *
+     * @param orderItem
+     * @return
+     */
     @Override
     public OrderItem save(OrderItem orderItem) {
         return orderItemRepository.save(orderItem);
     }
 
+    /**
+     * finds all OrdderItems by ClientId
+     *
+     * @param clientId
+     * @return
+     */
     @Override
     public List<OrderItem> findAllByOrderClientId(Long clientId) {
         return orderItemRepository.findAllByOrder_Client_Id(clientId);
     }
 
+    /**
+     * finds all OrdderItems by OrderId
+     *
+     * @param orderId
+     * @return
+     */
     @Override
     public List<OrderItem> findAllByOrder_Id(long orderId) {
         return orderItemRepository.findAllByOrder_Id(orderId);
     }
 
+    /**
+     * finds all OrdderItems by ProductId
+     *
+     * @param productId
+     * @return
+     */
     @Override
     public List<OrderItem> findAllByProductId(long productId) {
         return orderItemRepository.findAllByProductId(productId);
     }
 
-
-    public List<OrderItemDTO> getOrderItemsDTOFromRequest(JsonNode node, ObjectMapper mapper) {
-        JsonNode orderItemsNone = node.get("orderItemsDTO");
-        List<OrderItemDTO> orderItemList = new ArrayList<>();
-        try {
-            OrderItemDTO[] orderItemsArray = mapper.treeToValue(orderItemsNone, OrderItemDTO[].class);
-            orderItemList = Arrays.asList(orderItemsArray);
-
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return orderItemList;
+    /**
+     * finds all OrdderItems by OrderItemId and ClientId
+     *
+     * @param itemId
+     * @param clientId
+     * @return
+     */
+    @Override
+    public OrderItem findOrderItemByIdAndOrderClientId(Long itemId, Long clientId) {
+        return orderItemRepository.findOrderItemByIdAndOrderClientId(itemId, clientId);
     }
 
-
+    /**
+     * converts OrderItemDTO to OrderItem and save it
+     *
+     * @param orderItemDTO
+     * @return
+     */
     public OrderItem convertOrderItemDTOToOrderItem(OrderItemDTO orderItemDTO) {
         return save(OrderItem.builder()
                 .id(orderItemDTO.getId())
@@ -97,7 +143,12 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .build());
     }
 
-
+    /**
+     * converts OrderItem to OrderItemDTO
+     *
+     * @param o
+     * @return
+     */
     public OrderItemDTO convertOrderItemToOrderItemDTO(OrderItem o) {
         return OrderItemDTO.builder()
                 .id(o.getId())
@@ -107,6 +158,12 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .build();
     }
 
+    /**
+     * converts list of OrderItems to list of OrderItemDTOs
+     *
+     * @param orderItems
+     * @return
+     */
     public List<OrderItemDTO> convertListOrderItemToListOrderItemDTO(List<OrderItem> orderItems) {
         return orderItems.stream()
                 .map(o -> convertOrderItemToOrderItemDTO(o))

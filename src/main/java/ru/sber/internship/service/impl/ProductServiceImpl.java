@@ -21,7 +21,7 @@ public class ProductServiceImpl implements ProductService {
     OrderItemServiceImpl orderItemService;
 
     /**
-     * show all clients in the database
+     * finds all clients
      * @return
      */
     @Override
@@ -30,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
-     * show product by Id
+     * finds product by Id
      * @param id
      * @return
      */
@@ -40,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
-     * Save Product in the database
+     * Save Product
      * @param product
      * @return
      */
