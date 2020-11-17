@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sber.internship.entity.OrderItem;
-import ru.sber.internship.entity.Product;
 import ru.sber.internship.entity.dto.OrderItemDTO;
 import ru.sber.internship.repository.OrderItemRepository;
 import ru.sber.internship.service.OrderItemService;
@@ -111,12 +110,6 @@ public class OrderItemServiceImpl implements OrderItemService {
     public List<OrderItemDTO> convertListOrderItemToListOrderItemDTO(List<OrderItem> orderItems) {
         return orderItems.stream()
                 .map(o -> convertOrderItemToOrderItemDTO(o))
-                .collect(Collectors.toList());
-    }
-
-    public List<OrderItem> convertListOrdetDTOToListOrder(List<OrderItemDTO> items) {
-        return items.stream()
-                .map(i -> convertOrderItemDTOToOrderItem(i))
                 .collect(Collectors.toList());
     }
 }
