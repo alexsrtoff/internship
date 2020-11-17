@@ -108,16 +108,16 @@ class OrderItemServiceImplTest {
         Mockito.when(itemService.findAllByOrderClientId(1L)).thenReturn(orderItemList);
         List<OrderItem> itemListByClientId = itemService.findAllByOrderClientId(1L);
 
-        Mockito.verify(itemRepository, Mockito.times(1)).findAllByOrder_Client_Id(1L);
+        Mockito.verify(itemRepository, Mockito.times(1)).findAllByOrderClientId(1L);
         Assert.assertEquals(orderItemList, itemListByClientId);
     }
 
     @Test
     void findAllByOrder_Id() {
-        Mockito.when(itemService.findAllByOrder_Id(1L)).thenReturn(orderItemList);
-        List<OrderItem> allByOrderid = itemService.findAllByOrder_Id(1);
+        Mockito.when(itemService.findAllByOrderId(1L)).thenReturn(orderItemList);
+        List<OrderItem> allByOrderid = itemService.findAllByOrderId(1);
         Assert.assertEquals(orderItemList, allByOrderid);
-        Mockito.verify(itemRepository, Mockito.times(1)).findAllByOrder_Id(1);
+        Mockito.verify(itemRepository, Mockito.times(1)).findAllByOrderId(1);
     }
 
     @Test

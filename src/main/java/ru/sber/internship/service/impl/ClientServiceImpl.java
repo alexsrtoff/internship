@@ -21,6 +21,7 @@ public class ClientServiceImpl implements ClientService {
 
     /**
      * finds all Clients
+     *
      * @return
      */
     @Override
@@ -30,6 +31,7 @@ public class ClientServiceImpl implements ClientService {
 
     /**
      * finds a Client by Id
+     *
      * @param id
      * @return
      */
@@ -40,6 +42,7 @@ public class ClientServiceImpl implements ClientService {
 
     /**
      * deletes Client by Id
+     *
      * @param id
      * @return
      */
@@ -53,6 +56,7 @@ public class ClientServiceImpl implements ClientService {
 
     /**
      * Save client
+     *
      * @param client
      * @return
      */
@@ -63,6 +67,7 @@ public class ClientServiceImpl implements ClientService {
 
     /**
      * Converts Client to ClienDTO
+     *
      * @param client
      * @return
      */
@@ -77,6 +82,7 @@ public class ClientServiceImpl implements ClientService {
 
     /**
      * Converts the Client list to the ClientDTO list
+     *
      * @param clientList
      * @return
      */
@@ -85,7 +91,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     /**
-     *Converts Client to ClienDTO and save it
+     * Converts Client to ClienDTO and save it
+     *
      * @param clientDTO
      * @return
      */
@@ -95,7 +102,7 @@ public class ClientServiceImpl implements ClientService {
                 .firstName(clientDTO.getFirstName())
                 .lastName(clientDTO.getLastName())
                 .email(clientDTO.getEmail())
-                .orders(orderService.findAllByClient_Id(clientDTO.getId()))
+                .orders(orderService.findAllByClientId(clientDTO.getId()))
                 .build());
     }
 }

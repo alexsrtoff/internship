@@ -94,33 +94,35 @@ public class OrderItemController {
             itemDTO.setProductId(orderItem.getProduct().getId());
             return itemDTO;
         } else {
+            itemDTO.setId(null);
             Order order = orderService.createOrder(itemDTO, clientId);
             return orderItemService.convertOrderItemToOrderItemDTO(order.getOrderItems().get(0));
         }
     }
 
     @PutMapping(value = "/update", consumes = {"application/json", "application/xml"})
-    public OrderItem update(@RequestBody OrderItem itemDTO) {
-        if (itemDTO.getId() == null) {
-            throw new IllegalArgumentException("Id not found in the update request");
+    public OrderItem update(@RequestBody OrderItem item) {
+        if (item.getId() == null) {
+            return add(item);
         }
-        return orderItemService.save(itemDTO);
+        return orderItemService.save(item);
     }
 
 
     @PutMapping(value = "/{clientId}/update", consumes = {"application/json", "application/xml"})
     @Transactional
-    public OrderItemDTO updateClientItem(@RequestBody OrderItemDTO itemDTO, @PathVariable("clientId") Long clientId) {
-        if (itemDTO.getId() == null) {
-            throw new IllegalArgumentException("Id not found in the update request");
-        }
-        if (orderService.chekOrderByOrderItem(itemDTO, clientId)) {
-            orderItemService.convertOrderItemDTOToOrderItem(itemDTO);
-            orderService.calcTotalPrice(itemDTO.getOrderId());
-            return itemDTO;
+    public OrderItemDTO updateClientItem(@RequestBody OrderItemDTO itemDTO,
+                                         @PathVariable("clientId") Long clientId) {
+        OrderItem item = orderItemService.findById(itemDTO.getId());
+        boolean checkByOrderItem = orderService.chekOrderByOrderItem(itemDTO, clientId);
+        if (item == null || !checkByOrderItem) {
+            itemDTO = addItemToClient(itemDTO, clientId);
         } else {
-            return new OrderItemDTO();
+            OrderItem orderItem = orderItemService.convertOrderItemDTOToOrderItem(itemDTO);
+            orderService.calcTotalPrice(orderItem.getOrder().getId());
+            itemDTO = orderItemService.convertOrderItemToOrderItemDTO(orderItem);
         }
+        return itemDTO;
     }
 
 

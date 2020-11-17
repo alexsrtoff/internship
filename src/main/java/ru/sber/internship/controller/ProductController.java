@@ -18,7 +18,8 @@ public class ProductController {
 
     @GetMapping
     public List<ProductDTO> findAll() {
-        return productService.convertProductListToProductDTOList(productService.findAll());
+        List<Product> products = productService.findAll();
+        return productService.convertProductListToProductDTOList(products);
     }
 
 
@@ -35,7 +36,7 @@ public class ProductController {
     public ProductDTO add(@RequestBody ProductDTO productDTO) {
         Product product = productService.findById(productDTO.getId());
         if (product != null) {
-            return new ProductDTO();
+            return update(productDTO);
         }
         Product newProduct = productService.convertProductDTOToProduct(productDTO);
         productDTO.setId(newProduct.getId());
@@ -47,7 +48,7 @@ public class ProductController {
     public ProductDTO update(@RequestBody ProductDTO productDTO) {
         Product product = productService.findById(productDTO.getId());
         if (product == null) {
-            return new ProductDTO();
+            return add(productDTO);
         }
         productService.convertProductDTOToProduct(productDTO);
         return productDTO;

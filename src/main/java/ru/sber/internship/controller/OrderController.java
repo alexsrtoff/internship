@@ -8,6 +8,7 @@ import ru.sber.internship.entity.dto.ClientDTO;
 import ru.sber.internship.entity.dto.OrderDTO;
 import ru.sber.internship.entity.dto.OrderItemDTO;
 import ru.sber.internship.entity.dto.ProductDTO;
+import ru.sber.internship.entity.utils.OrderStatus;
 import ru.sber.internship.service.impl.ClientServiceImpl;
 import ru.sber.internship.service.impl.OrderItemServiceImpl;
 import ru.sber.internship.service.impl.OrderServiceImpl;
@@ -80,20 +81,25 @@ public class OrderController {
     @PostMapping(value = "/add", consumes = {"application/json", "application/xml"})
     @Transactional
     public OrderDTO add(@RequestBody OrderDTO orderDTO) {
-        if (orderDTO.getId() != null) orderDTO.setId(null);
-        Order order = orderService.convertOrderDTOToOrder(orderDTO);
+        Order order = orderService.findById(orderDTO.getId());
+        if (order != null) {
+            return update(orderDTO);
+        }
+        order = orderService.convertOrderDTOToOrder(orderDTO);
         return orderService.convertOrderToOrderDTO(orderService.save(order));
     }
 
     @PutMapping(value = "/update", consumes = {"application/json", "application/xml"})
     @Transactional
     public OrderDTO update(@RequestBody OrderDTO orderDTO) {
-        if (orderService.chekOrder(orderDTO)) {
-            Order order = orderService.findById(orderDTO.getId());
-            order.setOrderStatus(orderDTO.getOrderStatus());
-            return orderService.convertOrderToOrderDTO(orderService.save(order));
+        boolean chekOrder = orderService.chekOrder(orderDTO);
+        if (chekOrder) {
+            orderDTO = orderService.update(orderDTO);
+        } else {
+            orderDTO.setOrderStatus(OrderStatus.UNPAYED);
+            orderDTO = add(orderDTO);
         }
-        return new OrderDTO();
+        return orderDTO;
     }
 
     @DeleteMapping("/{id}")
@@ -105,6 +111,6 @@ public class OrderController {
     @DeleteMapping("/{clientId}/{id}")
     public boolean deleteByClient(@PathVariable(value = "id") long id,
                                   @PathVariable(value = "clientId") long clientId) {
-        return orderService.deleteByIdAndClient_Id(id, clientId);
+        return orderService.deleteByIdAndClientId(id, clientId);
     }
 }

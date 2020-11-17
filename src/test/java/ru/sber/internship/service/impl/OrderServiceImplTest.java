@@ -27,8 +27,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
@@ -120,33 +118,31 @@ class OrderServiceImplTest {
 
     @Test
     void findOrderByIdAndAndClientId() {
-        Mockito.when(orderService.findOrderByIdAndAndClientId(1L, 1L)).thenReturn(order);
-        Order order1 = orderService.findOrderByIdAndAndClientId(1L, 1L);
+        Mockito.when(orderService.findByIdAndClientId(1L, 1L)).thenReturn(order);
+        Order order1 = orderService.findByIdAndClientId(1L, 1L);
         Assert.assertEquals(order, order1);
         Mockito.verify(orderRepository, Mockito.times(1)).findOrderByIdAndClientId(1L, 1L);
     }
 
     @Test
     void deleteByIdAndClient_Id() {
-        Mockito.when(orderService.findByIdAndClient_Id(1, 1)).thenReturn(order);
-        Mockito.when(orderService.findByIdAndClient_Id(1, 10)).thenReturn(null);
-        boolean deleteTrue = orderService.deleteByIdAndClient_Id(1, 1);
-        boolean deleteFalse = orderService.deleteByIdAndClient_Id(1, 10);
+        Mockito.when(orderService.findByIdAndClientId(1, 1)).thenReturn(order);
+        Mockito.when(orderService.findByIdAndClientId(1, 10)).thenReturn(null);
+        boolean deleteTrue = orderService.deleteByIdAndClientId(1, 1);
+        boolean deleteFalse = orderService.deleteByIdAndClientId(1, 10);
 
         Assert.assertTrue(deleteTrue);
         Assert.assertFalse(deleteFalse);
 
         Mockito.verify(orderRepository, Mockito.times(1)).delete(order);
-        Mockito.verify(orderRepository, Mockito.times(1)).findByIdAndClient_Id(1, 1);
-        Mockito.verify(orderRepository, Mockito.times(1)).findByIdAndClient_Id(1, 10);
     }
 
     @Test
     void findAllByClient_Id() {
-        Mockito.when(orderService.findAllByClient_Id(1)).thenReturn(orderList);
-        List<Order> orderList1 = orderService.findAllByClient_Id(1);
+        Mockito.when(orderService.findAllByClientId(1)).thenReturn(orderList);
+        List<Order> orderList1 = orderService.findAllByClientId(1);
         Assert.assertEquals(orderList, orderList1);
-        Mockito.verify(orderRepository, Mockito.times(1)).findAllByClient_Id(1);
+        Mockito.verify(orderRepository, Mockito.times(1)).findAllByClientId(1);
     }
 
     @Test
@@ -170,15 +166,15 @@ class OrderServiceImplTest {
         Order order1 = Order.builder().id(1L).totalPrice(BigDecimal.ONE).orderStatus(OrderStatus.PAYED).client(client).orderItems(orderItemList).build();
         OrderItemDTO itemDTO1 = OrderItemDTO.builder().id(1L).count(1).orderId(10L).productId(1L).build();
 
-        Mockito.when(orderService.findOrderByIdAndAndClientId(1L, 1L)).thenReturn(order);
-        Mockito.when(orderService.findOrderByIdAndAndClientId(1L, 10L)).thenReturn(null);
-        Mockito.when(orderService.findOrderByIdAndAndClientId(10L, 1L)).thenReturn(null);
+        Mockito.when(orderService.findByIdAndClientId(1L, 1L)).thenReturn(order);
+        Mockito.when(orderService.findByIdAndClientId(1L, 10L)).thenReturn(null);
+        Mockito.when(orderService.findByIdAndClientId(10L, 1L)).thenReturn(null);
 
         boolean checkTrue = orderService.chekOrderByOrderItem(itemDTO, 1L);
         boolean checkFalseClientId = orderService.chekOrderByOrderItem(itemDTO, 10L);
         boolean checkFalseItemDTO = orderService.chekOrderByOrderItem(itemDTO1, 1L);
 
-        Mockito.when(orderService.findOrderByIdAndAndClientId(1L, 1L)).thenReturn(order1);
+        Mockito.when(orderService.findByIdAndClientId(1L, 1L)).thenReturn(order1);
         boolean checkFalseOrderStatus = orderService.chekOrderByOrderItem(itemDTO1, 1L);
 
         Assert.assertTrue(checkTrue);
@@ -193,9 +189,9 @@ class OrderServiceImplTest {
         OrderDTO orderDTO2 = OrderDTO.builder().id(1L).orderStatus(OrderStatus.UNPAYED).totalPrice(BigDecimal.ONE).clientId(10L).build();
         OrderDTO orderDTO3 = OrderDTO.builder().id(1L).orderStatus(OrderStatus.PAYED).totalPrice(BigDecimal.ONE).clientId(1L).build();
 
-        Mockito.when(orderService.findOrderByIdAndAndClientId(1L, 1L)).thenReturn(order);
-        Mockito.when(orderService.findOrderByIdAndAndClientId(10L, 1L)).thenReturn(null);
-        Mockito.when(orderService.findOrderByIdAndAndClientId(1L, 10L)).thenReturn(null);
+        Mockito.when(orderService.findByIdAndClientId(1L, 1L)).thenReturn(order);
+        Mockito.when(orderService.findByIdAndClientId(10L, 1L)).thenReturn(null);
+        Mockito.when(orderService.findByIdAndClientId(1L, 10L)).thenReturn(null);
 
         boolean checkTrue = orderService.chekOrder(orderDTO);
         boolean checkFalseOrderId = orderService.chekOrder(orderDTO1);
@@ -206,7 +202,7 @@ class OrderServiceImplTest {
         Assert.assertFalse(checkFalseOrderId);
 
         order.setOrderStatus(OrderStatus.PAYED);
-        Mockito.when(orderService.findOrderByIdAndAndClientId(1L, 1L)).thenReturn(order);
+        Mockito.when(orderService.findByIdAndClientId(1L, 1L)).thenReturn(order);
         boolean checkFalseOrderStatus = orderService.chekOrder(orderDTO3);
         Assert.assertFalse(checkFalseOrderStatus);
     }

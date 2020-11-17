@@ -38,7 +38,7 @@ public class ClientController {
     public List<OrderDTO> showOrdersByClientId(@PathVariable("clientId") long clientId) {
 
         return orderService
-                .convertOrderListToOrderDTOList(orderService.findAllByClient_Id(clientId));
+                .convertOrderListToOrderDTOList(orderService.findAllByClientId(clientId));
     }
 
     @PostMapping(value = "/add", consumes = {"application/json", "application/xml"})
@@ -57,7 +57,7 @@ public class ClientController {
     public ClientDTO update(@RequestBody ClientDTO clientDTO) {
         Client client = clientService.findById(clientDTO.getId());
         if (client.getId() == null) {
-            return new ClientDTO();
+            return add(clientDTO);
         }
         clientService.convertClientDTOToClient(clientDTO);
         return clientDTO;

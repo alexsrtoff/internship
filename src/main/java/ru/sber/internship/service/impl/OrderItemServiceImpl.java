@@ -91,7 +91,7 @@ public class OrderItemServiceImpl implements OrderItemService {
      */
     @Override
     public List<OrderItem> findAllByOrderClientId(Long clientId) {
-        return orderItemRepository.findAllByOrder_Client_Id(clientId);
+        return orderItemRepository.findAllByOrderClientId(clientId);
     }
 
     /**
@@ -101,8 +101,8 @@ public class OrderItemServiceImpl implements OrderItemService {
      * @return
      */
     @Override
-    public List<OrderItem> findAllByOrder_Id(long orderId) {
-        return orderItemRepository.findAllByOrder_Id(orderId);
+    public List<OrderItem> findAllByOrderId(long orderId) {
+        return orderItemRepository.findAllByOrderId(orderId);
     }
 
     /**

@@ -11,13 +11,11 @@ public interface OrderService {
 
     Order save(Order order);
 
-    Order findOrderByIdAndAndClientId(Long orderId, Long clientId);
+    boolean deleteByIdAndClientId(long orderId, long clientId);
 
-    boolean deleteByIdAndClient_Id(long orderId, long clientId);
+    List<Order> findAllByClientId(long id);
 
-    List<Order> findAllByClient_Id(long id);
-
-    Order findByIdAndClient_Id(long orderId, long clientId);
+    Order findByIdAndClientId(long orderId, long clientId);
 
 
 }

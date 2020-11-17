@@ -37,7 +37,9 @@ public class Order {
     private List<OrderItem> orderItems;
 
     @JsonIgnore
-    public Client getClient(){return client;}
+    public Client getClient() {
+        return client;
+    }
 
     @Override
     public boolean equals(Object o) {

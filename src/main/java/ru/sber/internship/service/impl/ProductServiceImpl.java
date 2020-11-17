@@ -22,6 +22,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * finds all clients
+     *
      * @return
      */
     @Override
@@ -31,6 +32,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * finds product by Id
+     *
      * @param id
      * @return
      */
@@ -41,6 +43,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * Save Product
+     *
      * @param product
      * @return
      */
@@ -50,6 +53,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * deletes Product by Id
+     *
      * @param id
      * @return
      */
@@ -63,6 +67,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * converts Product to ProductDTO
+     *
      * @param product
      * @return
      */
@@ -78,6 +83,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * creates a list of ProductsDTO  from the IrderItem list
+     *
      * @param items
      * @return
      */
@@ -88,6 +94,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * converts a list of Products to the ProductDTO list
+     *
      * @param items
      * @return
      */
@@ -98,6 +105,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * converts a list of ProductDTO to the Products list
+     *
      * @param productDTO
      * @return
      */
