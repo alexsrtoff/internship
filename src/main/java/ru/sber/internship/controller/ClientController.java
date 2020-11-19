@@ -45,6 +45,12 @@ public class ClientController {
     @Transactional
     public ClientDTO add(@RequestBody ClientDTO clientDTO) {
         Client client = clientService.findById(clientDTO.getId());
+        Client client1 = clientService.findByEmail(clientDTO.getEmail());
+        if (client1 != null){
+            clientDTO.setEmail("Client with this email already exists");
+            clientDTO.setId(null);
+            return clientDTO;
+        }
         if (client != null) {
             return clientService.convertClientToClientDTO(client);
         }

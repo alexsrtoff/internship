@@ -40,6 +40,11 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.findById(id);
     }
 
+    @Override
+    public Client findByEmail(String email) {
+        return clientRepository.findByEmail(email);
+    }
+
     /**
      * deletes Client by Id
      *

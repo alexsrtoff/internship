@@ -8,4 +8,7 @@ public interface ClientService {
     List<Client> findAll();
 
     Client findById(long id);
+
+    Client findByEmail(String email);
+
 }

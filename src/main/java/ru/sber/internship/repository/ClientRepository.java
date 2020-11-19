@@ -9,4 +9,6 @@ import ru.sber.internship.entity.OrderItem;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
     Client findById(long id);
+
+    Client findByEmail(String email);
 }
