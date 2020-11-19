@@ -1,4 +1,4 @@
-package ru.sber.internship;
+package ru.sber.internship.rabbitmq.utils;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @EnableRabbit
 @Configuration
-public class RabbitConfiguration {
+public class MQClientConfig {
 
     @Bean
     public ConnectionFactory connectionFactory() {
