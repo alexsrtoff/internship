@@ -42,13 +42,14 @@ public class OrderController {
 
 
     @GetMapping("/{id}")
-    public OrderDTO findById(@PathVariable(value = "id") int id) {
+    public OrderDTO findById(@PathVariable(value = "id") long id) {
         if (orderService.findById(id) != null) {
             return orderService.convertOrderToOrderDTO(orderService.findById(id));
         } else return new OrderDTO();
     }
 
     @GetMapping("{odredId}/products")
+    @Transactional
     public List<ProductDTO> showProductsByOrderId(@PathVariable("odredId") Long id) {
         List<ProductDTO> productDTOList = new ArrayList<>();
         Order order = orderService.findById(id);
@@ -59,6 +60,7 @@ public class OrderController {
     }
 
     @GetMapping("{odredId}/client")
+    @Transactional
     public ClientDTO showClientByOrderId(@PathVariable("odredId") Long id) {
         Order order = orderService.findById(id);
         if (order != null) {
@@ -68,6 +70,7 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}/items")
+    @Transactional
     public List<OrderItemDTO> showOrderItemsByOrderId(@PathVariable("orderId") Long id) {
         List<OrderItemDTO> itemDTOS = new ArrayList<>();
         Order order = orderService.findById(id);
