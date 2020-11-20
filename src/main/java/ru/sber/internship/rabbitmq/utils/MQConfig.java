@@ -460,5 +460,253 @@ public class MQConfig {
         return BindingBuilder.bind(orderResponseQueueDeleteByClientId()).to(directExchange2()).with("orders.delete.clientId");
     }
 
+    //request orderItem Queues
+    @Bean
+    public Queue orderItemRequestQueueAll() {
+        return new Queue("request.orderItems.all");
+    }
+
+    @Bean
+    public Queue orderItemRequestQueueAllByClientId() {
+        return new Queue("request.orderItems.all.clientId");
+    }
+
+    @Bean
+    public Queue orderItemRequestQueueFindClientByItemId() {
+        return new Queue("request.orderItems.client.itemId");
+    }
+
+    @Bean
+    public Queue orderItemRequestQueueFindOrderByItemId() {
+        return new Queue("request.orderItems.order.itemId");
+    }
+
+    @Bean
+    public Queue orderItemRequestQueueFindById() {
+        return new Queue("request.orderItems.id");
+    }
+
+    @Bean
+    public Queue orderItemRequestQueueFindProductByItemId() {
+        return new Queue("request.orderItems.product.itemId");
+    }
+
+    @Bean
+    public Queue orderItemRequestQueueAdd() {
+        return new Queue("request.orderItems.add");
+    }
+
+    @Bean
+    public Queue orderItemRequestQueueAddByClientId() {
+        return new Queue("request.orderItems.add.clientId");
+    }
+
+    @Bean
+    public Queue orderItemRequestQueueUpdate() {
+        return new Queue("request.orderItems.update");
+    }
+
+    @Bean
+    public Queue orderItemRequestQueueUpdateByClientId() {
+        return new Queue("request.orderItems.update.clientId");
+    }
+
+    @Bean
+    public Queue orderItemRequestQueueDelete() {
+        return new Queue("request.orderItems.delete");
+    }
+
+    @Bean
+    public Queue orderItemRequestQueueDeleteByIdAndClientId() {
+        return new Queue("request.orderItems.delete.clientId");
+    }
+
+
+    //response orderItem Queues
+    @Bean
+    public Queue orderItemResponseQueueAll() {
+        return new Queue("response.orderItems.all");
+    }
+
+
+    @Bean
+    public Queue orderItemResponseQueueAllByClientId() {
+        return new Queue("response.orderItems.all.clientId");
+    }
+
+    @Bean
+    public Queue orderItemResponseQueueFindClientByItemId() {
+        return new Queue("response.orderItems.client.itemId");
+    }
+
+    @Bean
+    public Queue orderItemResponseQueueFindOrderByItemId() {
+        return new Queue("response.orderItems.order.itemId");
+    }
+
+    @Bean
+    public Queue orderItemResponseQueueFindById() {
+        return new Queue("response.orderItems.id");
+    }
+
+    @Bean
+    public Queue orderItemResponseQueueFindProductByItemId() {
+        return new Queue("response.orderItems.product.itemId");
+    }
+
+    @Bean
+    public Queue orderItemResponseQueueAdd() {
+        return new Queue("response.orderItems.add");
+    }
+
+    @Bean
+    public Queue orderItemResponseQueueAddByClientId() {
+        return new Queue("response.orderItems.add.clientId");
+    }
+
+    @Bean
+    public Queue orderItemResponseQueueUpdate() {
+        return new Queue("response.orderItems.update");
+    }
+
+    @Bean
+    public Queue orderItemResponseQueueUpdateByClientId() {
+        return new Queue("response.orderItems.update.clientId");
+    }
+
+    @Bean
+    public Queue orderItemResponseQueueDelete() {
+        return new Queue("response.orderItems.delete");
+    }
+
+    @Bean
+    public Queue orderItemResponseQueueDeleteByIdAndClientId() {
+        return new Queue("response.orderItems.delete.clientId");
+    }
+
+
+    // bindings for orderItem request
+    @Bean
+    public Binding orderItemGetAll() {
+        return BindingBuilder.bind(orderItemRequestQueueAll()).to(directExchange1()).with("orderItems.all");
+    }
+
+    @Bean
+    public Binding orderItemGetAllByClientId() {
+        return BindingBuilder.bind(orderItemRequestQueueAllByClientId()).to(directExchange1()).with("orderItems.all.clientId");
+    }
+
+    @Bean
+    public Binding orderItemGetClientByItemId() {
+        return BindingBuilder.bind(orderItemRequestQueueFindClientByItemId()).to(directExchange1()).with("orderItems.client.itemId");
+    }
+
+    @Bean
+    public Binding orderItemGetOrderByItemId() {
+        return BindingBuilder.bind(orderItemRequestQueueFindOrderByItemId()).to(directExchange1()).with("orderItems.order.itemId");
+    }
+
+    @Bean
+    public Binding orderItemGetById() {
+        return BindingBuilder.bind(orderItemRequestQueueFindById()).to(directExchange1()).with("orderItems.id");
+    }
+
+    @Bean
+    public Binding orderItemGetProductByItemId() {
+        return BindingBuilder.bind(orderItemRequestQueueFindProductByItemId()).to(directExchange1()).with("orderItems.product.itemId");
+    }
+
+    @Bean
+    public Binding orderItemAdd() {
+        return BindingBuilder.bind(orderItemRequestQueueAdd()).to(directExchange1()).with("orderItems.add");
+    }
+
+    @Bean
+    public Binding orderItemAddByClientId() {
+        return BindingBuilder.bind(orderItemRequestQueueAddByClientId()).to(directExchange1()).with("orderItems.add.clientId");
+    }
+
+    @Bean
+    public Binding orderItemAUpdate() {
+        return BindingBuilder.bind(orderItemRequestQueueUpdate()).to(directExchange1()).with("orderItems.update");
+    }
+
+    @Bean
+    public Binding orderItemUpdateByClientId() {
+        return BindingBuilder.bind(orderItemRequestQueueUpdateByClientId()).to(directExchange1()).with("orderItems.update.clientId");
+    }
+
+    @Bean
+    public Binding orderItemDelete() {
+        return BindingBuilder.bind(orderItemRequestQueueDelete()).to(directExchange1()).with("orderItems.delete");
+    }
+
+    @Bean
+    public Binding orderItemDeleteByIDAndClientId() {
+        return BindingBuilder.bind(orderItemRequestQueueDeleteByIdAndClientId()).to(directExchange1()).with("orderItems.delete.clientId");
+    }
+
+
+    // bindings for orderItem response
+    @Bean
+    public Binding orderItemResponseAll() {
+        return BindingBuilder.bind(orderItemResponseQueueAll()).to(directExchange2()).with("orderItems.all");
+    }
+
+    @Bean
+    public Binding orderItemResponseAllByClientId() {
+        return BindingBuilder.bind(orderItemResponseQueueAllByClientId()).to(directExchange2()).with("orderItems.all.clientId");
+    }
+
+    @Bean
+    public Binding orderItemResponseFindClientByItemId() {
+        return BindingBuilder.bind(orderItemResponseQueueFindClientByItemId()).to(directExchange2()).with("orderItems.client.itemId");
+    }
+
+    @Bean
+    public Binding orderItemResponseFindOrderByItemId() {
+        return BindingBuilder.bind(orderItemResponseQueueFindOrderByItemId()).to(directExchange2()).with("orderItems.order.itemId");
+    }
+
+    @Bean
+    public Binding orderItemResponseFindById() {
+        return BindingBuilder.bind(orderItemResponseQueueFindById()).to(directExchange2()).with("orderItems.id");
+    }
+
+    @Bean
+    public Binding orderItemResponseFindProductByItemId() {
+        return BindingBuilder.bind(orderItemResponseQueueFindProductByItemId()).to(directExchange2()).with("orderItems.product.itemId");
+    }
+
+    @Bean
+    public Binding orderItemResponseAdd() {
+        return BindingBuilder.bind(orderItemResponseQueueAdd()).to(directExchange2()).with("orderItems.add");
+    }
+
+    @Bean
+    public Binding orderItemResponseAddByClientId() {
+        return BindingBuilder.bind(orderItemResponseQueueAddByClientId()).to(directExchange2()).with("orderItems.add.clientId");
+    }
+
+    @Bean
+    public Binding orderItemResponseUpdate() {
+        return BindingBuilder.bind(orderItemResponseQueueUpdate()).to(directExchange2()).with("orderItems.update");
+    }
+
+    @Bean
+    public Binding orderItemResponseUpdateByClientId() {
+        return BindingBuilder.bind(orderItemResponseQueueUpdateByClientId()).to(directExchange2()).with("orderItems.update.clientId");
+    }
+
+    @Bean
+    public Binding orderItemResponseDelete() {
+        return BindingBuilder.bind(orderItemResponseQueueDelete()).to(directExchange2()).with("orderItems.delete");
+    }
+
+    @Bean
+    public Binding orderItemResponseDeleteByIdAndClientId() {
+        return BindingBuilder.bind(orderItemResponseQueueDeleteByIdAndClientId()).to(directExchange2()).with("orderItems.delete.clientId");
+    }
+
 
 }

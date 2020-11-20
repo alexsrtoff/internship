@@ -88,7 +88,7 @@ public class OrderControllerMQ {
 
     @DeleteMapping("/{clientId}/{id}")
     public String deleteByClient(@PathVariable(value = "id") long id,
-                                  @PathVariable(value = "clientId") long clientId) {
+                                 @PathVariable(value = "clientId") long clientId) {
         String msg = id + "/" + clientId;
         rabbitTemplate.convertAndSend("request", "orders.delete.clientId", msg);
         return "Message sent successfully to the queue.";
