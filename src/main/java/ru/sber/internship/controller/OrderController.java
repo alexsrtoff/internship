@@ -112,6 +112,7 @@ public class OrderController {
 
 
     @DeleteMapping("/{clientId}/{id}")
+    @Transactional
     public boolean deleteByClient(@PathVariable(value = "id") long id,
                                   @PathVariable(value = "clientId") long clientId) {
         return orderService.deleteByIdAndClientId(id, clientId);

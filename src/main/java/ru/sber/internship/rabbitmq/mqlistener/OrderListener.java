@@ -94,4 +94,41 @@ public class OrderListener {
             e.printStackTrace();
         }
     }
+
+    @RabbitListener(queues = "request.orders.update")
+    public void update(String msg){
+        try {
+            OrderDTO orderDTO = mapper.readValue(msg, OrderDTO.class);
+            OrderDTO updateOrderDTO = orderController.update(orderDTO);
+            msg = mapper.writeValueAsString(updateOrderDTO);
+            rabbitTemplate.convertAndSend("response", "orders.update", msg);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+    @RabbitListener(queues = "request.orders.delete")
+    public void delete(Long id){
+        boolean delete = orderController.delete(id);
+        try {
+            String msg = mapper.writeValueAsString(delete);
+            rabbitTemplate.convertAndSend("response","orders.delete", msg );
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RabbitListener(queues = "request.orders.delete.clientId")
+    public void deletOrderByIdAndClientId(String msg){
+        String[] tokens = msg.split("/");
+        Long id = Long.valueOf(tokens[0]);
+        Long clientId = Long.valueOf(tokens[1]);
+        boolean deleteByClient = orderController.deleteByClient(id, clientId);
+        try {
+            msg = mapper.writeValueAsString(deleteByClient);
+            rabbitTemplate.convertAndSend("response", "orders.delete.clientId", msg);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
