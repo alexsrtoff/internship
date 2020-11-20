@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @EnableRabbit
 @Configuration
-public class MQClientConfig {
+public class MQConfig {
 
     @Bean
     public ConnectionFactory connectionFactory() {
@@ -28,7 +28,18 @@ public class MQClientConfig {
         return new RabbitTemplate(connectionFactory());
     }
 
-    //request Queues
+    //exchenges
+    @Bean
+    public DirectExchange directExchange1() {
+        return new DirectExchange("request");
+    }
+
+    @Bean
+    public DirectExchange directExchange2() {
+        return new DirectExchange("response");
+    }
+
+    //request client Queues
     @Bean
     public Queue clientRequestQueueAll() {
         return new Queue("request.clients.all");
@@ -60,7 +71,7 @@ public class MQClientConfig {
     }
 
 
-    //response Queues
+    //response client Queues
 
     @Bean
     public Queue clientResponseQueueAll() {
@@ -92,18 +103,8 @@ public class MQClientConfig {
         return new Queue("response.clients.delete");
     }
 
-    //exchenges
-    @Bean
-    public DirectExchange directExchange1() {
-        return new DirectExchange("request");
-    }
 
-    @Bean
-    public DirectExchange directExchange2() {
-        return new DirectExchange("response");
-    }
-
-    // bindings for request
+    // bindings for client request
     @Bean
     public Binding clientsGetAll() {
         return BindingBuilder.bind(clientRequestQueueAll()).to(directExchange1()).with("clients.all");
@@ -135,7 +136,7 @@ public class MQClientConfig {
     }
 
 
-    // bindings for response
+    // bindings for client response
 
     @Bean
     public Binding clientsResponseAll() {
@@ -166,5 +167,111 @@ public class MQClientConfig {
     public Binding clientsDelete() {
         return BindingBuilder.bind(clientResponseQueueDelete()).to(directExchange2()).with("clients.delete");
     }
+
+
+    //request product Queues
+    @Bean
+    public Queue productRequestQueueAll() {
+        return new Queue("request.products.all");
+    }
+
+    @Bean
+    public Queue productRequestQueueById() {
+        return new Queue("request.products.id");
+    }
+
+    @Bean
+    public Queue productRequestQueueAdd() {
+        return new Queue("request.products.add");
+    }
+
+    @Bean
+    public Queue productRequestQueueUpdate() {
+        return new Queue("request.products.update");
+    }
+
+    @Bean
+    public Queue productRequestQueueDelete() {
+        return new Queue("request.products.delete");
+    }
+
+    //response product Queues
+    @Bean
+    public Queue productResponseQueueAll() {
+        return new Queue("response.products.all");
+    }
+
+    @Bean
+    public Queue productResponseQueueById() {
+        return new Queue("response.products.id");
+    }
+
+    @Bean
+    public Queue productResponseQueueAdd() {
+        return new Queue("response.products.add");
+    }
+
+    @Bean
+    public Queue productResponseQueueUpdate() {
+        return new Queue("response.products.update");
+    }
+
+    @Bean
+    public Queue productResponseQueueDelete() {
+        return new Queue("response.products.delete");
+    }
+
+    // bindings for product request
+    @Bean
+    public Binding productsGetAll() {
+        return BindingBuilder.bind(productRequestQueueAll()).to(directExchange1()).with("products.all");
+    }
+
+    @Bean
+    public Binding productsGetById() {
+        return BindingBuilder.bind(productRequestQueueById()).to(directExchange1()).with("products.id");
+    }
+
+    @Bean
+    public Binding productsAdd() {
+        return BindingBuilder.bind(productRequestQueueAdd()).to(directExchange1()).with("products.add");
+    }
+
+    @Bean
+    public Binding productsUpdate() {
+        return BindingBuilder.bind(productRequestQueueUpdate()).to(directExchange1()).with("products.update");
+    }
+
+    @Bean
+    public Binding productsDelete() {
+        return BindingBuilder.bind(productRequestQueueDelete()).to(directExchange1()).with("products.delete");
+    }
+
+    // bindings for product response
+    @Bean
+    public Binding productssResponseAll() {
+        return BindingBuilder.bind(productResponseQueueAll()).to(directExchange2()).with("products.all");
+    }
+
+    @Bean
+    public Binding productssResponseById() {
+        return BindingBuilder.bind(productResponseQueueById()).to(directExchange2()).with("products.id");
+    }
+
+    @Bean
+    public Binding productssResponseAdd() {
+        return BindingBuilder.bind(productResponseQueueAdd()).to(directExchange2()).with("products.add");
+    }
+
+    @Bean
+    public Binding productssResponseUpdate() {
+        return BindingBuilder.bind(productResponseQueueUpdate()).to(directExchange2()).with("products.update");
+    }
+
+    @Bean
+    public Binding productssResponseDelete() {
+        return BindingBuilder.bind(productResponseQueueDelete()).to(directExchange2()).with("products.delete");
+    }
+
 
 }
