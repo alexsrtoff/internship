@@ -390,28 +390,28 @@ public class MQConfig {
     }
 
     @Bean
-    public Binding ordersGetItemsByOrderId(){
-        return  BindingBuilder.bind(orderRequestQueueItemstByOrderId()).to(directExchange1()).with("orders.items.orderId");
+    public Binding ordersGetItemsByOrderId() {
+        return BindingBuilder.bind(orderRequestQueueItemstByOrderId()).to(directExchange1()).with("orders.items.orderId");
     }
 
     @Bean
-    public Binding ordersAdd(){
-        return  BindingBuilder.bind(orderRequestQueueAdd()).to(directExchange1()).with("orders.add");
+    public Binding ordersAdd() {
+        return BindingBuilder.bind(orderRequestQueueAdd()).to(directExchange1()).with("orders.add");
     }
 
     @Bean
-    public Binding ordersUpdate(){
-        return  BindingBuilder.bind(orderRequestQueueUpdate()).to(directExchange1()).with("orders.update");
+    public Binding ordersUpdate() {
+        return BindingBuilder.bind(orderRequestQueueUpdate()).to(directExchange1()).with("orders.update");
     }
 
     @Bean
-    public Binding ordersDelete(){
-        return  BindingBuilder.bind(orderRequestQueueDelete()).to(directExchange1()).with("orders.delete");
+    public Binding ordersDelete() {
+        return BindingBuilder.bind(orderRequestQueueDelete()).to(directExchange1()).with("orders.delete");
     }
 
     @Bean
-    public Binding ordersDeleteByclientId(){
-        return  BindingBuilder.bind(orderRequestQueueDeleteByClienId()).to(directExchange1()).with("orders.delete.clientId");
+    public Binding ordersDeleteByclientId() {
+        return BindingBuilder.bind(orderRequestQueueDeleteByClienId()).to(directExchange1()).with("orders.delete.clientId");
     }
 
     // bindings for order response
@@ -440,23 +440,25 @@ public class MQConfig {
         return BindingBuilder.bind(orderResponseQueueItemsByOrderId()).to(directExchange2()).with("orders.items.orderId");
     }
 
+    @Bean
     public Binding ordersResponseAdd() {
         return BindingBuilder.bind(orderResponseQueueAdd()).to(directExchange2()).with("orders.add");
     }
 
+    @Bean
     public Binding ordersResponseUpdate() {
         return BindingBuilder.bind(orderResponseQueueUpdate()).to(directExchange2()).with("orders.update");
     }
 
+    @Bean
     public Binding ordersResponseDelete() {
         return BindingBuilder.bind(orderResponseQueueDelete()).to(directExchange2()).with("orders.delete");
     }
 
+    @Bean
     public Binding ordersResponseDeleteByClientId() {
         return BindingBuilder.bind(orderResponseQueueDeleteByClientId()).to(directExchange2()).with("orders.delete.clientId");
     }
-
-
 
 
 }

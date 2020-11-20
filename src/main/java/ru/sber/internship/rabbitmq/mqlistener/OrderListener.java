@@ -1,6 +1,7 @@
 package ru.sber.internship.rabbitmq.mqlistener;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -77,6 +78,18 @@ public class OrderListener {
         try {
             String msg = mapper.writeValueAsString(itemDTOS);
             rabbitTemplate.convertAndSend("response", "orders.items.orderId", msg);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RabbitListener(queues = "request.orders.add")
+    public void add(String msg) {
+        try {
+            OrderDTO orderDTO = mapper.readValue(msg, OrderDTO.class);
+            OrderDTO newOrderDTO = orderController.add(orderDTO);
+            msg = mapper.writeValueAsString(newOrderDTO);
+            rabbitTemplate.convertAndSend("response", "orders.add", msg);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
